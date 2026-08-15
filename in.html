@@ -519,20 +519,14 @@
     <script src="script.js"></script>
 
 </body>
-<script>document.addEventListener("DOMContentLoaded", function () {
+<script>
+document.addEventListener("DOMContentLoaded", function () {
 
     const form = document.getElementById("quoteForm");
     const messageBox = document.getElementById("quoteMessage");
     const submitButton = document.getElementById("quoteSubmit");
 
-    if (!form) {
-        return;
-    }
-
-
-    /* ============================================================
-       INPUT ELEMENTS
-    ============================================================ */
+    if (!form) return;
 
     const fullName = document.getElementById("fullName");
     const companyName = document.getElementById("companyName");
@@ -541,9 +535,9 @@
     const yourMessage = document.getElementById("yourMessage");
 
 
-    /* ============================================================
+    /* =========================
        SHOW ERROR
-    ============================================================ */
+    ========================= */
 
     function showError(input, message) {
 
@@ -560,9 +554,9 @@
     }
 
 
-    /* ============================================================
+    /* =========================
        CLEAR ERROR
-    ============================================================ */
+    ========================= */
 
     function clearError(input) {
 
@@ -578,15 +572,13 @@
     }
 
 
-    /* ============================================================
+    /* =========================
        VALIDATE FIELD
-    ============================================================ */
+    ========================= */
 
     function validateField(input, message) {
 
-        const value = input.value.trim();
-
-        if (value === "") {
+        if (input.value.trim() === "") {
 
             showError(input, message);
 
@@ -600,9 +592,9 @@
     }
 
 
-    /* ============================================================
+    /* =========================
        PHONE VALIDATION
-    ============================================================ */
+    ========================= */
 
     function validatePhone() {
 
@@ -637,9 +629,9 @@
     }
 
 
-    /* ============================================================
+    /* =========================
        CLEAR MESSAGE
-    ============================================================ */
+    ========================= */
 
     function clearMessage() {
 
@@ -649,9 +641,9 @@
     }
 
 
-    /* ============================================================
-       FORM SUBMIT
-    ============================================================ */
+    /* =========================
+       SUBMIT FORM
+    ========================= */
 
     form.addEventListener("submit", async function (event) {
 
@@ -660,9 +652,7 @@
         clearMessage();
 
 
-        /* -----------------------------------------
-           VALIDATE ALL FIELDS
-        ----------------------------------------- */
+        /* VALIDATION */
 
         const validName = validateField(
             fullName,
@@ -687,10 +677,6 @@
         );
 
 
-        /* -----------------------------------------
-           STOP IF VALIDATION FAILS
-        ----------------------------------------- */
-
         if (
             !validName ||
             !validCompany ||
@@ -698,49 +684,98 @@
             !validPhone ||
             !validMessage
         ) {
-
             return;
         }
 
 
-        /* -----------------------------------------
-           LOADING STATE
-        ----------------------------------------- */
+        /* LOADING */
 
         submitButton.disabled = true;
 
-        submitButton.querySelector(".submit-text").style.display = "none";
+        const submitText =
+            submitButton.querySelector(".submit-text");
 
-        submitButton.querySelector(".submit-loading").style.display = "inline";
+        const submitLoading =
+            submitButton.querySelector(".submit-loading");
 
-        submitButton.querySelector(".send-icon").style.display = "none";
+        const sendIcon =
+            submitButton.querySelector(".send-icon");
+
+        if (submitText)
+            submitText.style.display = "none";
+
+        if (submitLoading)
+            submitLoading.style.display = "inline";
+
+        if (sendIcon)
+            sendIcon.style.display = "none";
 
 
-        /* -----------------------------------------
-           FORM DATA
-        ----------------------------------------- */
+        /* FORM DATA */
 
         const formData = new FormData(form);
 
 
-        /* -----------------------------------------
-           AJAX REQUEST
-        ----------------------------------------- */
+        /* =========================
+           AJAX → PHP
+           
+           IMPORTANT:
+           ct.php must be in the
+           SAME FOLDER as this HTML
+        ========================= */
 
         try {
 
-            const response = await fetch("ct.php", {
+            const response = await fetch("./ct.php", {
                 method: "POST",
-                body: formData
+                body: formData,
+                headers: {
+                    "X-Requested-With": "XMLHttpRequest"
+                }
             });
 
 
-            const result = await response.json();
+            /* Check HTTP response */
+
+            if (!response.ok) {
+
+                throw new Error(
+                    "Server error: " + response.status
+                );
+            }
 
 
-            /* -----------------------------------------
+            /* Get PHP response as text first */
+
+            const responseText = await response.text();
+
+            console.log("PHP Response:", responseText);
+
+
+            /* Convert JSON */
+
+            let result;
+
+            try {
+
+                result = JSON.parse(responseText);
+
+            } catch (jsonError) {
+
+                console.error(
+                    "Invalid JSON from PHP:",
+                    responseText
+                );
+
+                throw new Error(
+                    "PHP did not return valid JSON."
+                );
+            }
+
+
+            /* =========================
                SUCCESS
-            ----------------------------------------- */
+            ========================= */
 
             if (result.success) {
 
@@ -750,39 +785,36 @@
                 messageBox.innerHTML =
                     '<i class="fa-solid fa-circle-check"></i>' +
                     '<span>' +
-                    result.message +
+                    (result.message ||
+                        "Your request has been sent successfully.") +
                     '</span>';
 
 
-                /* Clear form */
+                /* RESET FORM */
 
                 form.reset();
 
 
-                /* Remove validation classes */
+                /* REMOVE VALIDATION */
 
-                const inputs =
-                    form.querySelectorAll(".form-control");
+                form.querySelectorAll(".form-control")
+                    .forEach(function (input) {
 
-                inputs.forEach(function (input) {
+                        input.classList.remove("is-valid");
+                        input.classList.remove("is-invalid");
 
-                    input.classList.remove("is-valid");
-                    input.classList.remove("is-invalid");
-
-                });
+                    });
 
 
-                /* Hide errors */
+                /* HIDE ERRORS */
 
-                const errors =
-                    form.querySelectorAll(".field-error");
+                form.querySelectorAll(".field-error")
+                    .forEach(function (error) {
 
-                errors.forEach(function (error) {
+                        error.classList.remove("show");
+                        error.textContent = "";
 
-                    error.classList.remove("show");
-                    error.textContent = "";
-
-                });
+                    });
 
 
             } else {
@@ -794,15 +826,14 @@
                     '<i class="fa-solid fa-circle-exclamation"></i>' +
                     '<span>' +
                     (result.message ||
-                        "Something went wrong. Please try again.") +
+                        "Unable to send your request.") +
                     '</span>';
-
             }
 
 
         } catch (error) {
 
-            console.error("AJAX Error:", error);
+            console.error("AJAX ERROR:", error);
 
             messageBox.className =
                 "quote-message error show";
@@ -810,31 +841,33 @@
             messageBox.innerHTML =
                 '<i class="fa-solid fa-circle-exclamation"></i>' +
                 '<span>' +
-                'Unable to send your request. Please try again later.' +
+                "Unable to send your request. Please try again later." +
                 '</span>';
 
         }
 
 
-        /* -----------------------------------------
+        /* =========================
            RESET BUTTON
-        ----------------------------------------- */
+        ========================= */
 
         submitButton.disabled = false;
 
-        submitButton.querySelector(".submit-text").style.display = "inline";
+        if (submitText)
+            submitText.style.display = "inline";
 
-        submitButton.querySelector(".submit-loading").style.display = "none";
+        if (submitLoading)
+            submitLoading.style.display = "none";
 
-        submitButton.querySelector(".send-icon").style.display = "inline";
-
+        if (sendIcon)
+            sendIcon.style.display = "inline";
 
     });
 
 
-    /* ============================================================
+    /* =========================
        LIVE VALIDATION
-    ============================================================ */
+    ========================= */
 
     fullName.addEventListener("input", function () {
 
@@ -886,9 +919,9 @@
     });
 
 
-    /* ============================================================
-       WHEN MODAL OPENS
-    ============================================================ */
+    /* =========================
+       MODAL OPEN
+    ========================= */
 
     const quoteModal =
         document.getElementById("quoteModal");
@@ -906,5 +939,6 @@
 
     }
 
-});</script>
+});
+</script>
 </html>
