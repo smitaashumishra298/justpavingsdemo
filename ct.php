@@ -109,7 +109,7 @@ $message = htmlspecialchars(
    TO YOUR BUSINESS EMAIL
 */
 
-$to = "YOUR_EMAIL@gmail.com";
+$to = "smitapathak298@gmail.com";
 
 $subject = "New Quote Request - JustPaving";
 
