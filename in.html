@@ -1,180 +1,1409 @@
-<!-- ================= GET QUOTE BUTTON ================= -->
+<!DOCTYPE html>
+<html lang="en">
 
-<button type="button" class="quote-btn" id="openQuote">
-    Get Quote
-</button>
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>JustPaving - Get a Quote</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f5f5f5;
+            color: #333;
+        }
 
 
-<!-- ================= QUOTE MODAL ================= -->
+        /* =====================================================
+           GET QUOTE BUTTON
+        ===================================================== */
 
-<div class="quote-modal" id="quoteModal" aria-hidden="true">
+        .quote-btn {
+            border: none;
+            background: #C9A227;
+            color: #1d1d1d;
 
-    <div class="quote-overlay" id="quoteOverlay"></div>
+            padding: 15px 30px;
 
-    <div class="quote-dialog">
+            border-radius: 50px;
 
-        <button type="button"
+            font-size: 15px;
+            font-weight: 700;
+
+            cursor: pointer;
+
+            transition: all .3s ease;
+        }
+
+        .quote-btn:hover {
+            background: #a8871c;
+            color: #fff;
+            transform: translateY(-3px);
+        }
+
+
+        /* =====================================================
+           MODAL
+        ===================================================== */
+
+        .quote-modal {
+            position: fixed;
+            inset: 0;
+
+            z-index: 99999;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            padding: 20px;
+
+            opacity: 0;
+            visibility: hidden;
+
+            transition:
+                opacity .3s ease,
+                visibility .3s ease;
+        }
+
+        .quote-modal.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+
+        /* Overlay */
+
+        .quote-overlay {
+            position: absolute;
+            inset: 0;
+
+            background: rgba(0, 0, 0, .75);
+
+            backdrop-filter: blur(5px);
+        }
+
+
+        /* =====================================================
+           MODAL BOX
+        ===================================================== */
+
+        .quote-dialog {
+            position: relative;
+            z-index: 2;
+
+            width: 100%;
+            max-width: 650px;
+
+            max-height: 92vh;
+
+            overflow-y: auto;
+
+            background: #fff;
+
+            border-radius: 22px;
+
+            padding: 40px;
+
+            box-shadow:
+                0 30px 100px rgba(0, 0, 0, .35);
+
+            transform:
+                translateY(30px) scale(.96);
+
+            transition:
+                transform .35s ease;
+        }
+
+        .quote-modal.active .quote-dialog {
+            transform:
+                translateY(0) scale(1);
+        }
+
+
+        /* =====================================================
+           CLOSE BUTTON
+        ===================================================== */
+
+        .quote-close {
+            position: absolute;
+
+            top: 15px;
+            right: 17px;
+
+            width: 42px;
+            height: 42px;
+
+            border: none;
+
+            border-radius: 50%;
+
+            background: #f2f2f2;
+
+            color: #333;
+
+            font-size: 28px;
+
+            line-height: 1;
+
+            cursor: pointer;
+
+            transition: all .3s ease;
+        }
+
+        .quote-close:hover {
+            background: #C9A227;
+            color: #fff;
+        }
+
+
+        /* =====================================================
+           HEADER
+        ===================================================== */
+
+        .quote-header {
+            text-align: center;
+
+            margin-bottom: 28px;
+        }
+
+        .quote-header span {
+            display: block;
+
+            color: #C9A227;
+
+            font-size: 12px;
+
+            font-weight: 700;
+
+            letter-spacing: 3px;
+
+            margin-bottom: 8px;
+        }
+
+        .quote-header h2 {
+            margin: 0 0 10px;
+
+            color: #2F2F2F;
+
+            font-family: Georgia, serif;
+
+            font-size: 32px;
+        }
+
+        .quote-header p {
+            margin: 0;
+
+            color: #777;
+
+            font-size: 15px;
+
+            line-height: 1.6;
+        }
+
+
+        /* =====================================================
+           FORM FIELD
+        ===================================================== */
+
+        .quote-field {
+            margin-bottom: 18px;
+        }
+
+        .quote-field label {
+            display: block;
+
+            margin-bottom: 7px;
+
+            color: #2F2F2F;
+
+            font-size: 14px;
+
+            font-weight: 600;
+        }
+
+        .quote-field label span {
+            color: #dc3545;
+        }
+
+
+        .quote-field input,
+        .quote-field textarea {
+            width: 100%;
+
+            padding: 14px 15px;
+
+            border: 1.5px solid #e1e1e1;
+
+            border-radius: 11px;
+
+            background: #fafafa;
+
+            color: #333;
+
+            font-family: inherit;
+
+            font-size: 15px;
+
+            outline: none;
+
+            transition:
+                border-color .25s ease,
+                box-shadow .25s ease,
+                background .25s ease;
+        }
+
+        .quote-field textarea {
+            resize: vertical;
+
+            min-height: 100px;
+        }
+
+        .quote-field input:focus,
+        .quote-field textarea:focus {
+            border-color: #C9A227;
+
+            background: #fff;
+
+            box-shadow:
+                0 0 0 4px rgba(201, 162, 39, .12);
+        }
+
+
+        /* =====================================================
+           VALIDATION
+        ===================================================== */
+
+        .quote-field input.invalid,
+        .quote-field textarea.invalid {
+            border-color: #dc3545;
+
+            background: #fff7f7;
+        }
+
+        .quote-field input.valid,
+        .quote-field textarea.valid {
+            border-color: #198754;
+        }
+
+        .field-error {
+            display: block;
+
+            min-height: 18px;
+
+            margin-top: 5px;
+
+            color: #dc3545;
+
+            font-size: 12px;
+        }
+
+
+        /* =====================================================
+           GENERAL ERROR
+        ===================================================== */
+
+        .form-error {
+            display: none;
+
+            margin-bottom: 16px;
+
+            padding: 12px 14px;
+
+            border-radius: 10px;
+
+            background: #fff0f0;
+
+            color: #b42318;
+
+            font-size: 14px;
+        }
+
+        .form-error.show {
+            display: block;
+        }
+
+
+        /* =====================================================
+           SUBMIT BUTTON
+        ===================================================== */
+
+        .quote-submit {
+            width: 100%;
+
+            border: none;
+
+            padding: 15px 20px;
+
+            border-radius: 50px;
+
+            background: #C9A227;
+
+            color: #1d1d1d;
+
+            font-size: 15px;
+
+            font-weight: 700;
+
+            cursor: pointer;
+
+            transition: all .3s ease;
+        }
+
+        .quote-submit:hover {
+            background: #a8871c;
+
+            color: #fff;
+
+            transform: translateY(-2px);
+        }
+
+        .quote-submit:disabled {
+            opacity: .65;
+
+            cursor: not-allowed;
+
+            transform: none;
+        }
+
+        #submitLoading {
+            display: none;
+        }
+
+
+        /* =====================================================
+           SUCCESS MESSAGE
+        ===================================================== */
+
+        .quote-success {
+            display: none;
+
+            text-align: center;
+
+            padding: 35px 15px;
+        }
+
+        .quote-success.show {
+            display: block;
+        }
+
+        .success-icon {
+            width: 70px;
+            height: 70px;
+
+            margin: 0 auto 18px;
+
+            display: flex;
+
+            align-items: center;
+            justify-content: center;
+
+            border-radius: 50%;
+
+            background: #e9f8ef;
+
+            color: #198754;
+
+            font-size: 38px;
+
+            font-weight: 700;
+        }
+
+        .quote-success h3 {
+            margin: 0 0 8px;
+
+            color: #2F2F2F;
+
+            font-size: 25px;
+        }
+
+        .quote-success p {
+            margin: 0;
+
+            color: #777;
+
+            font-size: 15px;
+        }
+
+
+        /* =====================================================
+           MOBILE
+        ===================================================== */
+
+        @media (max-width: 600px) {
+
+            .quote-dialog {
+                padding: 30px 20px;
+
+                max-height: 94vh;
+
+                border-radius: 18px;
+            }
+
+            .quote-header h2 {
+                font-size: 26px;
+            }
+
+            .quote-header p {
+                font-size: 14px;
+            }
+
+            .quote-btn {
+                padding: 13px 24px;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+    <!-- =====================================================
+         GET QUOTE BUTTON
+    ====================================================== -->
+
+    <button
+        type="button"
+        class="quote-btn"
+        id="openQuote">
+
+        Get Quote
+
+    </button>
+
+
+
+    <!-- =====================================================
+         QUOTE MODAL
+    ====================================================== -->
+
+    <div
+        class="quote-modal"
+        id="quoteModal"
+        aria-hidden="true">
+
+
+        <!-- Overlay -->
+
+        <div
+            class="quote-overlay"
+            id="quoteOverlay">
+        </div>
+
+
+        <!-- Modal Box -->
+
+        <div
+            class="quote-dialog"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="quoteTitle">
+
+
+            <!-- Close -->
+
+            <button
+                type="button"
                 class="quote-close"
                 id="closeQuote"
                 aria-label="Close">
-            &times;
-        </button>
 
-        <div class="quote-header">
-            <span>GET A QUOTE</span>
-            <h2>Let's Discuss Your Project</h2>
-            <p>
-                Fill in your details and we will get back to you.
-            </p>
-        </div>
-
-
-        <!-- SUCCESS MESSAGE -->
-
-        <div class="quote-success" id="quoteSuccess">
-            <div class="success-icon">✓</div>
-
-            <h3>Thank You!</h3>
-
-            <p>
-                Your quote request has been submitted successfully.
-            </p>
-        </div>
-
-
-        <!-- FORM -->
-
-        <form id="quoteForm" novalidate>
-
-            <!-- Full Name -->
-
-            <div class="quote-field">
-
-                <label for="fullName">
-                    Full Name <span>*</span>
-                </label>
-
-                <input
-                    type="text"
-                    id="fullName"
-                    name="fullName"
-                    placeholder="Enter your full name"
-                    autocomplete="name"
-                >
-
-                <small class="field-error"></small>
-
-            </div>
-
-
-            <!-- Company -->
-
-            <div class="quote-field">
-
-                <label for="companyName">
-                    Company Name <span>*</span>
-                </label>
-
-                <input
-                    type="text"
-                    id="companyName"
-                    name="companyName"
-                    placeholder="Enter company name"
-                    autocomplete="organization"
-                >
-
-                <small class="field-error"></small>
-
-            </div>
-
-
-            <!-- Address -->
-
-            <div class="quote-field">
-
-                <label for="address">
-                    Address <span>*</span>
-                </label>
-
-                <textarea
-                    id="address"
-                    name="address"
-                    rows="3"
-                    placeholder="Enter your address"
-                ></textarea>
-
-                <small class="field-error"></small>
-
-            </div>
-
-
-            <!-- Phone -->
-
-            <div class="quote-field">
-
-                <label for="phone">
-                    Phone Number <span>*</span>
-                </label>
-
-                <input
-                    type="tel"
-                    id="phone"
-                    name="phone"
-                    placeholder="Enter phone number"
-                    autocomplete="tel"
-                    inputmode="tel"
-                >
-
-                <small class="field-error"></small>
-
-            </div>
-
-
-            <!-- Message -->
-
-            <div class="quote-field">
-
-                <label for="yourMessage">
-                    Your Message <span>*</span>
-                </label>
-
-                <textarea
-                    id="yourMessage"
-                    name="yourMessage"
-                    rows="4"
-                    placeholder="Tell us about your project..."
-                ></textarea>
-
-                <small class="field-error"></small>
-
-            </div>
-
-
-            <!-- GENERAL ERROR -->
-
-            <div class="form-error" id="formError"></div>
-
-
-            <!-- SUBMIT -->
-
-            <button
-                type="submit"
-                class="quote-submit"
-                id="quoteSubmit"
-            >
-
-                <span id="submitText">
-                    Send Quote Request
-                </span>
-
-                <span id="submitLoading">
-                    Sending...
-                </span>
+                &times;
 
             </button>
 
-        </form>
+
+
+            <!-- =================================================
+                 HEADER
+            ================================================== -->
+
+            <div class="quote-header">
+
+                <span>GET A QUOTE</span>
+
+                <h2 id="quoteTitle">
+                    Let's Discuss Your Project
+                </h2>
+
+                <p>
+                    Fill in your details and we will get back
+                    to you shortly.
+                </p>
+
+            </div>
+
+
+
+            <!-- =================================================
+                 SUCCESS MESSAGE
+            ================================================== -->
+
+            <div
+                class="quote-success"
+                id="quoteSuccess">
+
+                <div class="success-icon">
+                    ✓
+                </div>
+
+                <h3>
+                    Thank You!
+                </h3>
+
+                <p>
+                    Your quote request has been submitted
+                    successfully.
+                </p>
+
+            </div>
+
+
+
+            <!-- =================================================
+                 FORM
+            ================================================== -->
+
+            <form
+                id="quoteForm"
+                novalidate>
+
+
+                <!-- Full Name -->
+
+                <div class="quote-field">
+
+                    <label for="fullName">
+
+                        Full Name
+                        <span>*</span>
+
+                    </label>
+
+                    <input
+                        type="text"
+                        id="fullName"
+                        name="fullName"
+                        placeholder="Enter your full name"
+                        autocomplete="name">
+
+                    <small
+                        class="field-error">
+                    </small>
+
+                </div>
+
+
+
+                <!-- Company Name -->
+
+                <div class="quote-field">
+
+                    <label for="companyName">
+
+                        Company Name
+                        <span>*</span>
+
+                    </label>
+
+                    <input
+                        type="text"
+                        id="companyName"
+                        name="companyName"
+                        placeholder="Enter company name"
+                        autocomplete="organization">
+
+                    <small
+                        class="field-error">
+                    </small>
+
+                </div>
+
+
+
+                <!-- Address -->
+
+                <div class="quote-field">
+
+                    <label for="address">
+
+                        Address
+                        <span>*</span>
+
+                    </label>
+
+                    <textarea
+                        id="address"
+                        name="address"
+                        rows="3"
+                        placeholder="Enter your address">
+                    </textarea>
+
+                    <small
+                        class="field-error">
+                    </small>
+
+                </div>
+
+
+
+                <!-- Phone -->
+
+                <div class="quote-field">
+
+                    <label for="phone">
+
+                        Phone Number
+                        <span>*</span>
+
+                    </label>
+
+                    <input
+                        type="tel"
+                        id="phone"
+                        name="phone"
+                        placeholder="Enter phone number"
+                        autocomplete="tel"
+                        inputmode="tel">
+
+                    <small
+                        class="field-error">
+                    </small>
+
+                </div>
+
+
+
+                <!-- Message -->
+
+                <div class="quote-field">
+
+                    <label for="yourMessage">
+
+                        Your Message
+                        <span>*</span>
+
+                    </label>
+
+                    <textarea
+                        id="yourMessage"
+                        name="yourMessage"
+                        rows="4"
+                        placeholder="Tell us about your project...">
+                    </textarea>
+
+                    <small
+                        class="field-error">
+                    </small>
+
+                </div>
+
+
+
+                <!-- General Error -->
+
+                <div
+                    class="form-error"
+                    id="formError">
+                </div>
+
+
+
+                <!-- Submit -->
+
+                <button
+                    type="submit"
+                    class="quote-submit"
+                    id="quoteSubmit">
+
+                    <span id="submitText">
+                        Send Quote Request
+                    </span>
+
+                    <span id="submitLoading">
+                        Sending...
+                    </span>
+
+                </button>
+
+
+            </form>
+
+        </div>
 
     </div>
 
-</div>
+
+
+    <!-- =====================================================
+         JAVASCRIPT
+    ====================================================== -->
+
+    <script>
+
+        document.addEventListener(
+            "DOMContentLoaded",
+            function () {
+
+
+                /* =================================================
+                   ELEMENTS
+                ================================================= */
+
+                const modal =
+                    document.getElementById("quoteModal");
+
+                const openButton =
+                    document.getElementById("openQuote");
+
+                const closeButton =
+                    document.getElementById("closeQuote");
+
+                const overlay =
+                    document.getElementById("quoteOverlay");
+
+                const form =
+                    document.getElementById("quoteForm");
+
+
+                const fullName =
+                    document.getElementById("fullName");
+
+                const companyName =
+                    document.getElementById("companyName");
+
+                const address =
+                    document.getElementById("address");
+
+                const phone =
+                    document.getElementById("phone");
+
+                const yourMessage =
+                    document.getElementById("yourMessage");
+
+
+                const submitButton =
+                    document.getElementById("quoteSubmit");
+
+                const submitText =
+                    document.getElementById("submitText");
+
+                const submitLoading =
+                    document.getElementById("submitLoading");
+
+                const successBox =
+                    document.getElementById("quoteSuccess");
+
+                const formError =
+                    document.getElementById("formError");
+
+
+
+                /* =================================================
+                   OPEN MODAL
+                ================================================= */
+
+                function openModal() {
+
+                    modal.classList.add("active");
+
+                    modal.setAttribute(
+                        "aria-hidden",
+                        "false"
+                    );
+
+                    document.body.style.overflow =
+                        "hidden";
+
+                    setTimeout(function () {
+
+                        fullName.focus();
+
+                    }, 300);
+
+                }
+
+
+
+                /* =================================================
+                   CLOSE MODAL
+                ================================================= */
+
+                function closeModal() {
+
+                    modal.classList.remove("active");
+
+                    modal.setAttribute(
+                        "aria-hidden",
+                        "true"
+                    );
+
+                    document.body.style.overflow =
+                        "";
+
+                }
+
+
+
+                /* =================================================
+                   OPEN BUTTON
+                ================================================= */
+
+                openButton.addEventListener(
+                    "click",
+                    openModal
+                );
+
+
+
+                /* =================================================
+                   CLOSE BUTTON
+                ================================================= */
+
+                closeButton.addEventListener(
+                    "click",
+                    closeModal
+                );
+
+
+
+                /* =================================================
+                   OVERLAY CLOSE
+                ================================================= */
+
+                overlay.addEventListener(
+                    "click",
+                    closeModal
+                );
+
+
+
+                /* =================================================
+                   ESCAPE KEY
+                ================================================= */
+
+                document.addEventListener(
+                    "keydown",
+                    function (event) {
+
+                        if (
+                            event.key === "Escape" &&
+                            modal.classList.contains("active")
+                        ) {
+
+                            closeModal();
+
+                        }
+
+                    }
+                );
+
+
+
+                /* =================================================
+                   SET ERROR
+                ================================================= */
+
+                function setError(
+                    input,
+                    message
+                ) {
+
+                    input.classList.remove(
+                        "valid"
+                    );
+
+                    input.classList.add(
+                        "invalid"
+                    );
+
+                    const error =
+                        input.parentElement
+                        .querySelector(
+                            ".field-error"
+                        );
+
+                    error.textContent =
+                        message;
+
+                }
+
+
+
+                /* =================================================
+                   SET VALID
+                ================================================= */
+
+                function setValid(input) {
+
+                    input.classList.remove(
+                        "invalid"
+                    );
+
+                    input.classList.add(
+                        "valid"
+                    );
+
+                    const error =
+                        input.parentElement
+                        .querySelector(
+                            ".field-error"
+                        );
+
+                    error.textContent = "";
+
+                }
+
+
+
+                /* =================================================
+                   TEXT VALIDATION
+                ================================================= */
+
+                function validateText(
+                    input,
+                    fieldName
+                ) {
+
+                    const value =
+                        input.value.trim();
+
+
+                    if (value === "") {
+
+                        setError(
+                            input,
+                            fieldName +
+                            " is required."
+                        );
+
+                        return false;
+
+                    }
+
+
+                    if (value.length < 2) {
+
+                        setError(
+                            input,
+                            fieldName +
+                            " must contain at least 2 characters."
+                        );
+
+                        return false;
+
+                    }
+
+
+                    setValid(input);
+
+                    return true;
+
+                }
+
+
+
+                /* =================================================
+                   PHONE VALIDATION
+                ================================================= */
+
+                function validatePhone() {
+
+                    const value =
+                        phone.value.trim();
+
+
+                    if (value === "") {
+
+                        setError(
+                            phone,
+                            "Phone number is required."
+                        );
+
+                        return false;
+
+                    }
+
+
+                    const phonePattern =
+                        /^[+]?[0-9\s()-]{7,18}$/;
+
+
+                    if (
+                        !phonePattern.test(value)
+                    ) {
+
+                        setError(
+                            phone,
+                            "Please enter a valid phone number."
+                        );
+
+                        return false;
+
+                    }
+
+
+                    const digits =
+                        value.replace(
+                            /\D/g,
+                            ""
+                        );
+
+
+                    if (
+                        digits.length < 7 ||
+                        digits.length > 15
+                    ) {
+
+                        setError(
+                            phone,
+                            "Please enter a valid phone number."
+                        );
+
+                        return false;
+
+                    }
+
+
+                    setValid(phone);
+
+                    return true;
+
+                }
+
+
+
+                /* =================================================
+                   COMPLETE FORM VALIDATION
+                ================================================= */
+
+                function validateForm() {
+
+                    let valid = true;
+
+
+                    if (
+                        !validateText(
+                            fullName,
+                            "Full Name"
+                        )
+                    ) {
+
+                        valid = false;
+
+                    }
+
+
+                    if (
+                        !validateText(
+                            companyName,
+                            "Company Name"
+                        )
+                    ) {
+
+                        valid = false;
+
+                    }
+
+
+                    if (
+                        !validateText(
+                            address,
+                            "Address"
+                        )
+                    ) {
+
+                        valid = false;
+
+                    }
+
+
+                    if (!validatePhone()) {
+
+                        valid = false;
+
+                    }
+
+
+                    if (
+                        !validateText(
+                            yourMessage,
+                            "Message"
+                        )
+                    ) {
+
+                        valid = false;
+
+                    }
+
+
+                    return valid;
+
+                }
+
+
+
+                /* =================================================
+                   LIVE VALIDATION
+                ================================================= */
+
+                [
+                    fullName,
+                    companyName,
+                    address,
+                    yourMessage
+                ].forEach(function (input) {
+
+                    input.addEventListener(
+                        "input",
+                        function () {
+
+                            if (
+                                this.value.trim() !== ""
+                            ) {
+
+                                setValid(this);
+
+                            }
+
+                        }
+                    );
+
+                });
+
+
+
+                /* =================================================
+                   PHONE INPUT
+                ================================================= */
+
+                phone.addEventListener(
+                    "input",
+                    function () {
+
+                        this.value =
+                            this.value.replace(
+                                /[^0-9+\s()-]/g,
+                                ""
+                            );
+
+                        if (
+                            this.value.trim() !== ""
+                        ) {
+
+                            setValid(this);
+
+                        }
+
+                    }
+                );
+
+
+
+                /* =================================================
+                   FORM SUBMIT
+                ================================================= */
+
+                form.addEventListener(
+                    "submit",
+                    function (event) {
+
+                        event.preventDefault();
+
+
+                        formError.classList.remove(
+                            "show"
+                        );
+
+                        formError.textContent =
+                            "";
+
+
+                        /* Validate */
+
+                        const isValid =
+                            validateForm();
+
+
+                        if (!isValid) {
+
+                            formError.textContent =
+                                "Please correct the highlighted fields.";
+
+                            formError.classList.add(
+                                "show"
+                            );
+
+                            return;
+
+                        }
+
+
+                        /* Loading */
+
+                        submitButton.disabled =
+                            true;
+
+                        submitText.style.display =
+                            "none";
+
+                        submitLoading.style.display =
+                            "inline";
+
+
+                        /*
+                         * FRONT-END ONLY
+                         *
+                         * No PHP
+                         * No backend
+                         * No external API
+                         *
+                         * Works on Cloudflare Pages
+                         * and normal static hosting.
+                         */
+
+
+                        setTimeout(
+                            function () {
+
+                                form.style.display =
+                                    "none";
+
+                                successBox.classList.add(
+                                    "show"
+                                );
+
+
+                                submitButton.disabled =
+                                    false;
+
+                                submitText.style.display =
+                                    "inline";
+
+                                submitLoading.style.display =
+                                    "none";
+
+                            },
+                            900
+                        );
+
+                    }
+                );
+
+
+
+                /* =================================================
+                   RESET FORM
+                ================================================= */
+
+                function resetForm() {
+
+                    form.reset();
+
+                    form.style.display =
+                        "block";
+
+                    successBox.classList.remove(
+                        "show"
+                    );
+
+                    formError.classList.remove(
+                        "show"
+                    );
+
+                    formError.textContent =
+                        "";
+
+
+                    const fields =
+                        form.querySelectorAll(
+                            "input, textarea"
+                        );
+
+
+                    fields.forEach(
+                        function (field) {
+
+                            field.classList.remove(
+                                "valid"
+                            );
+
+                            field.classList.remove(
+                                "invalid"
+                            );
+
+                        }
+                    );
+
+
+                    const errors =
+                        form.querySelectorAll(
+                            ".field-error"
+                        );
+
+
+                    errors.forEach(
+                        function (error) {
+
+                            error.textContent =
+                                "";
+
+                        }
+                    );
+
+                }
+
+
+
+                /* =================================================
+                   RESET AFTER CLOSE
+                ================================================= */
+
+                closeButton.addEventListener(
+                    "click",
+                    function () {
+
+                        setTimeout(
+                            resetForm,
+                            350
+                        );
+
+                    }
+                );
+
+
+                overlay.addEventListener(
+                    "click",
+                    function () {
+
+                        setTimeout(
+                            resetForm,
+                            350
+                        );
+
+                    }
+                );
+
+
+            }
+        );
+
+    </script>
+
+</body>
+
+</html>
