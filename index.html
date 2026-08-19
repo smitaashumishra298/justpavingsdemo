@@ -547,7 +547,47 @@
     </div>
 
 </section>
+  
+<!---modal-->
+  <div id="quotePopup" class="popup-overlay">
+  <div class="quote-popup">
+    <button id="closeQuoteBtn" class="close-btn" type="button">&times;</button>
 
+    <h2>Get a Quote</h2>
+    <p class="popup-subtitle">Fill in your details and we will get back to you.</p>
+
+    <form id="quoteForm" novalidate>
+      <div class="form-group">
+        <label for="name">Name <span>*</span></label>
+        <input type="text" id="name" name="name" placeholder="Enter your name">
+        <small class="error" id="nameError"></small>
+      </div>
+
+      <div class="form-group">
+        <label for="email">Email <span>*</span></label>
+        <input type="email" id="email" name="email" placeholder="Enter your email">
+        <small class="error" id="emailError"></small>
+      </div>
+
+      <div class="form-group">
+        <label for="phone">Phone <span>*</span></label>
+        <input type="tel" id="phone" name="phone" placeholder="Enter your 10-digit phone number" maxlength="10" inputmode="numeric">
+        <small class="error" id="phoneError"></small>
+      </div>
+
+      <div class="form-group">
+        <label for="message">Message <span>*</span></label>
+        <textarea id="message" name="message" rows="4" placeholder="Tell us about your requirement"></textarea>
+        <small class="error" id="messageError"></small>
+      </div>
+
+      <button type="submit" class="submit-btn" id="submitBtn">Submit</button>
+      <div id="formMessage"></div>
+    </form>
+  </div>
+</div>
+
+  <!--modal end-->
 
 <!-- ===== FOOTER ===== -->
 
