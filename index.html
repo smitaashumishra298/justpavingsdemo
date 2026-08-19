@@ -13,154 +13,6 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 <link rel="stylesheet" href="css/style.css">
 <script>(function(){function h(){var p=document.getElementById('preloader');if(p)p.classList.add('hidden');}window.addEventListener('load',h);setTimeout(h,1600);})();</script>
-
-<style>
-/* ===== GET QUOTE POPUP - ADDED ONLY ===== */
-.quote-modal {
-  display: none;
-  position: fixed;
-  inset: 0;
-  z-index: 99999;
-  align-items: center;
-  justify-content: center;
-  padding: 20px;
-}
-.quote-modal.active { display: flex; }
-.quote-modal-overlay {
-  position: absolute;
-  inset: 0;
-  background: rgba(0,0,0,.72);
-  backdrop-filter: blur(3px);
-}
-.quote-modal-box {
-  position: relative;
-  z-index: 2;
-  width: 100%;
-  max-width: 560px;
-  max-height: 90vh;
-  overflow-y: auto;
-  background: #fff;
-  padding: 32px;
-  border-radius: 12px;
-  box-shadow: 0 20px 60px rgba(0,0,0,.35);
-  animation: quoteModalIn .25s ease;
-}
-@keyframes quoteModalIn {
-  from { opacity: 0; transform: translateY(20px) scale(.97); }
-  to { opacity: 1; transform: translateY(0) scale(1); }
-}
-.quote-modal-close {
-  position: absolute;
-  top: 10px;
-  right: 15px;
-  width: 36px;
-  height: 36px;
-  border: 0;
-  background: transparent;
-  color: #333;
-  font-size: 30px;
-  line-height: 1;
-  cursor: pointer;
-}
-.quote-modal-title {
-  margin: 0 35px 6px 0;
-  font-size: 30px;
-  color: #222;
-}
-.quote-modal-subtitle {
-  margin: 0 0 22px;
-  color: #666;
-  font-size: 14px;
-}
-.quote-form-group { margin-bottom: 15px; }
-.quote-form-group label {
-  display: block;
-  margin-bottom: 6px;
-  font-size: 14px;
-  font-weight: 600;
-  color: #333;
-}
-.quote-form-group input,
-.quote-form-group textarea {
-  width: 100%;
-  padding: 12px 13px;
-  border: 1px solid #d5d5d5;
-  border-radius: 6px;
-  outline: none;
-  font: inherit;
-  color: #222;
-  background: #fff;
-}
-.quote-form-group textarea { resize: vertical; min-height: 85px; }
-.quote-form-group input:focus,
-.quote-form-group textarea:focus {
-  border-color: #c9a227;
-  box-shadow: 0 0 0 3px rgba(201,162,39,.12);
-}
-.quote-form-group .quote-invalid {
-  border-color: #d93025;
-  background: #fff8f8;
-}
-.quote-error {
-  display: block;
-  min-height: 15px;
-  margin-top: 4px;
-  color: #d93025;
-  font-size: 12px;
-}
-.quote-submit {
-  width: 100%;
-  border: 0;
-  border-radius: 6px;
-  padding: 13px;
-  background: #c9a227;
-  color: #fff;
-  font-weight: 600;
-  cursor: pointer;
-}
-.quote-submit:disabled { opacity: .65; cursor: not-allowed; }
-.quote-general-error {
-  margin-top: 12px;
-  color: #d93025;
-  text-align: center;
-  font-size: 13px;
-}
-.quote-success {
-  display: none;
-  text-align: center;
-  padding: 20px 5px 5px;
-}
-.quote-success.active { display: block; }
-.quote-success-icon {
-  width: 65px;
-  height: 65px;
-  margin: 0 auto 15px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: #e8f5e9;
-  color: #2e7d32;
-  font-size: 36px;
-  font-weight: 700;
-}
-.quote-success h3 { margin-bottom: 8px; color: #222; }
-.quote-success p { color: #666; line-height: 1.5; margin-bottom: 20px; }
-.quote-success-close {
-  border: 0;
-  border-radius: 5px;
-  padding: 10px 25px;
-  background: #c9a227;
-  color: #fff;
-  cursor: pointer;
-}
-@media (max-width: 576px) {
-  .quote-modal { padding: 12px; }
-  .quote-modal-box { padding: 25px 18px; max-height: 92vh; }
-  .quote-modal-title { font-size: 25px; }
-}
-</style>
-
 </head>
 <body>
 
@@ -190,20 +42,20 @@
       <a href="products.html">Products <i class="fa-solid fa-chevron-down" style="font-size:.62rem"></i></a>
       <div class="mega"><div class="mega-grid">
         <div class="mega-col"><h5>Porcelain</h5><ul>
-          
+          <li><a href="products.html"><i class="fa-solid fa-layer-group"></i>Porcelain Slabs</a></li>
           <li><a href="products.html"><i class="fa-solid fa-border-all"></i>Porcelain Pavers</a></li>
-         
-          <li><a href="products.html"><i class="fa-solid fa-house"></i>Accessories</a></li>
+          <li><a href="products.html"><i class="fa-solid fa-sun"></i>Outdoor Porcelain</a></li>
+          <li><a href="products.html"><i class="fa-solid fa-house"></i>Indoor Porcelain</a></li>
         </ul></div>
         <div class="mega-col"><h5>Natural Stone</h5><ul>
-          <li><a href="products.html"><i class="fa-solid fa-mountain"></i>Sand Stone</a></li>
-        
+          <li><a href="products.html"><i class="fa-solid fa-mountain"></i>Natural Stone</a></li>
+          <li><a href="products.html"><i class="fa-solid fa-gem"></i>Marble</a></li>
           <li><a href="products.html"><i class="fa-solid fa-cube"></i>Granite</a></li>
           <li><a href="products.html"><i class="fa-solid fa-stroopwafel"></i>Limestone</a></li>
           <li><a href="products.html"><i class="fa-solid fa-water"></i>Sandstone</a></li>
-         
+          <li><a href="products.html"><i class="fa-solid fa-th-large"></i>Travertine</a></li>
           <li><a href="products.html"><i class="fa-solid fa-clone"></i>Slate</a></li>
-         
+          <li><a href="products.html"><i class="fa-solid fa-diamond"></i>Quartz</a></li>
         </ul></div>
         <div class="mega-col"><h5>Finishing</h5><ul>
           <li><a href="products.html"><i class="fa-solid fa-grip"></i>Wall Cladding</a></li>
@@ -217,15 +69,15 @@
         </a>
       </div></div>
     </li>
-   
-  
+    <li><a href="index.html#projects">Projects</a></li>
+    <li><a href="gallery.html">Gallery</a></li>
     <li><a href="index.html#services">Services</a></li>
     <li><a href="index.html#blog">Blog</a></li>
     <li><a href="contact.html">Contact</a></li>
   </ul></nav>
   <div class="nav-actions">
     
-    <button type="button" class="btn btn-gold d-none d-sm-inline-flex" id="openQuoteModal">Get Quote</button>
+    <a class="btn btn-gold d-none d-sm-inline-flex" href="contact.html">Get Quote</a>
     <button class="burger" id="burger" aria-label="Open menu"><i class="fa-solid fa-bars"></i></button>
   </div>
 </div></header>
@@ -242,7 +94,8 @@
     <a href="products.html">Porcelain Slabs</a><a href="products.html">Outdoor Porcelain</a>
     <a href="products.html">Marble</a><a href="products.html">Granite</a><a href="products.html">Travertine</a>
   </div>
-  
+  <a href="index.html#projects">Projects</a>
+  <a href="gallery.html">Gallery</a>
   <a href="index.html#services">Services</a>
   <a href="index.html#blog">Blog / News</a>
   <a href="contact.html">Contact Us</a>
@@ -397,67 +250,6 @@
   <div class="hero-cta justify-content-center"><a href="contact.html" class="btn btn-gold btn-pulse">Request a Free Quote <i class="fa-solid fa-arrow-right"></i></a><a href="contact.html" class="btn btn-ghost-light">Download Catalogue <i class="fa-solid fa-download"></i></a></div>
 </div></section>
 
-
-<!-- ===== GET QUOTE POPUP - ADDED ONLY ===== -->
-<div class="quote-modal" id="quoteModal" aria-hidden="true">
-  <div class="quote-modal-overlay" id="quoteModalOverlay"></div>
-
-  <div class="quote-modal-box" role="dialog" aria-modal="true" aria-labelledby="quoteModalTitle">
-    <button type="button" class="quote-modal-close" id="closeQuoteModal" aria-label="Close">&times;</button>
-
-    <div id="quoteFormWrap">
-      <h2 class="quote-modal-title" id="quoteModalTitle">Get a Quote</h2>
-      <p class="quote-modal-subtitle">Fill in your details and we will contact you shortly.</p>
-
-      <form id="quoteForm" novalidate>
-        <div class="quote-form-group">
-          <label for="quoteFullName">Full Name *</label>
-          <input type="text" id="quoteFullName" name="Full Name" autocomplete="name">
-          <small class="quote-error" id="quoteFullNameError"></small>
-        </div>
-
-        <div class="quote-form-group">
-          <label for="quoteCompanyName">Company Name *</label>
-          <input type="text" id="quoteCompanyName" name="Company Name" autocomplete="organization">
-          <small class="quote-error" id="quoteCompanyNameError"></small>
-        </div>
-
-        <div class="quote-form-group">
-          <label for="quoteAddress">Address *</label>
-          <textarea id="quoteAddress" name="Address" rows="3" autocomplete="street-address"></textarea>
-          <small class="quote-error" id="quoteAddressError"></small>
-        </div>
-
-        <div class="quote-form-group">
-          <label for="quotePhone">Phone Number *</label>
-          <input type="tel" id="quotePhone" name="Phone Number" maxlength="10" inputmode="numeric" autocomplete="tel">
-          <small class="quote-error" id="quotePhoneError"></small>
-        </div>
-
-        <div class="quote-form-group">
-          <label for="quoteMessage">Message *</label>
-          <textarea id="quoteMessage" name="Message" rows="4"></textarea>
-          <small class="quote-error" id="quoteMessageError"></small>
-        </div>
-
-        <button type="submit" class="quote-submit" id="quoteSubmit">
-          <span id="quoteSubmitText">Send Enquiry</span>
-          <span id="quoteSubmitLoading" style="display:none;">Sending...</span>
-        </button>
-
-        <div class="quote-general-error" id="quoteGeneralError"></div>
-      </form>
-    </div>
-
-    <div class="quote-success" id="quoteSuccess">
-      <div class="quote-success-icon">✓</div>
-      <h3>Thank You!</h3>
-      <p>Your enquiry has been sent successfully. We will contact you shortly.</p>
-      <button type="button" class="quote-success-close" id="quoteSuccessClose">Close</button>
-    </div>
-  </div>
-</div>
-
 <!-- ===== FOOTER (identical on every page) ===== -->
 <footer class="site-footer"><div class="container"><div class="f-grid">
   <div><a class="brand" href="index.html"><img src="assets/logo-badge.png" alt="JustPaving"></a><p>Premium porcelain and natural stone for architects, developers and discerning homeowners. Sourced with care, supplied with expertise across the UK.</p><div class="f-social"><a href="#" aria-label="Facebook"><i class="fa-brands fa-facebook-f"></i></a><a href="#" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a><a href="#" aria-label="LinkedIn"><i class="fa-brands fa-linkedin-in"></i></a><a href="#" aria-label="Pinterest"><i class="fa-brands fa-pinterest-p"></i></a></div></div>
@@ -535,185 +327,6 @@ document.addEventListener("DOMContentLoaded", function () {
   startSlider();
 
 });
-
-/* ===== GET QUOTE POPUP - ADDED ONLY ===== */
-(function () {
-  const FORMSPREE_ENDPOINT = "https://formspree.io/f/YOUR_FORM_ID";
-
-  const modal = document.getElementById("quoteModal");
-  const openBtn = document.getElementById("openQuoteModal");
-  const closeBtn = document.getElementById("closeQuoteModal");
-  const overlay = document.getElementById("quoteModalOverlay");
-  const form = document.getElementById("quoteForm");
-  const formWrap = document.getElementById("quoteFormWrap");
-  const success = document.getElementById("quoteSuccess");
-  const successClose = document.getElementById("quoteSuccessClose");
-  const submitBtn = document.getElementById("quoteSubmit");
-  const submitText = document.getElementById("quoteSubmitText");
-  const submitLoading = document.getElementById("quoteSubmitLoading");
-  const generalError = document.getElementById("quoteGeneralError");
-
-  const fields = {
-    fullName: {
-      input: document.getElementById("quoteFullName"),
-      error: document.getElementById("quoteFullNameError")
-    },
-    companyName: {
-      input: document.getElementById("quoteCompanyName"),
-      error: document.getElementById("quoteCompanyNameError")
-    },
-    address: {
-      input: document.getElementById("quoteAddress"),
-      error: document.getElementById("quoteAddressError")
-    },
-    phone: {
-      input: document.getElementById("quotePhone"),
-      error: document.getElementById("quotePhoneError")
-    },
-    message: {
-      input: document.getElementById("quoteMessage"),
-      error: document.getElementById("quoteMessageError")
-    }
-  };
-
-  function openModal() {
-    modal.classList.add("active");
-    modal.setAttribute("aria-hidden", "false");
-    document.body.style.overflow = "hidden";
-    setTimeout(() => fields.fullName.input.focus(), 100);
-  }
-
-  function closeModal() {
-    modal.classList.remove("active");
-    modal.setAttribute("aria-hidden", "true");
-    document.body.style.overflow = "";
-  }
-
-  function setError(field, text) {
-    field.input.classList.add("quote-invalid");
-    field.error.textContent = text;
-  }
-
-  function clearError(field) {
-    field.input.classList.remove("quote-invalid");
-    field.error.textContent = "";
-  }
-
-  function validate() {
-    let valid = true;
-    generalError.textContent = "";
-
-    const name = fields.fullName.input.value.trim();
-    if (!name) {
-      setError(fields.fullName, "Full Name is required.");
-      valid = false;
-    } else if (!/^[A-Za-zÀ-ÿ\s.'-]{2,60}$/.test(name)) {
-      setError(fields.fullName, "Please enter a valid full name.");
-      valid = false;
-    } else clearError(fields.fullName);
-
-    const company = fields.companyName.input.value.trim();
-    if (!company) {
-      setError(fields.companyName, "Company Name is required.");
-      valid = false;
-    } else if (company.length < 2 || company.length > 100) {
-      setError(fields.companyName, "Company Name must be 2–100 characters.");
-      valid = false;
-    } else clearError(fields.companyName);
-
-    const address = fields.address.input.value.trim();
-    if (!address) {
-      setError(fields.address, "Address is required.");
-      valid = false;
-    } else if (address.length < 10) {
-      setError(fields.address, "Please enter a complete address.");
-      valid = false;
-    } else if (address.length > 300) {
-      setError(fields.address, "Address cannot exceed 300 characters.");
-      valid = false;
-    } else clearError(fields.address);
-
-    const phone = fields.phone.input.value.trim();
-    if (!phone) {
-      setError(fields.phone, "Phone Number is required.");
-      valid = false;
-    } else if (!/^[6-9][0-9]{9}$/.test(phone)) {
-      setError(fields.phone, "Enter a valid 10-digit Indian mobile number.");
-      valid = false;
-    } else clearError(fields.phone);
-
-    const message = fields.message.input.value.trim();
-    if (!message) {
-      setError(fields.message, "Message is required.");
-      valid = false;
-    } else if (message.length < 10) {
-      setError(fields.message, "Message must contain at least 10 characters.");
-      valid = false;
-    } else if (message.length > 1000) {
-      setError(fields.message, "Message cannot exceed 1000 characters.");
-      valid = false;
-    } else clearError(fields.message);
-
-    return valid;
-  }
-
-  fields.phone.input.addEventListener("input", function () {
-    this.value = this.value.replace(/\D/g, "").slice(0, 10);
-  });
-
-  openBtn.addEventListener("click", openModal);
-  closeBtn.addEventListener("click", closeModal);
-  overlay.addEventListener("click", closeModal);
-
-  document.addEventListener("keydown", function (e) {
-    if (e.key === "Escape" && modal.classList.contains("active")) closeModal();
-  });
-
-  successClose.addEventListener("click", function () {
-    success.classList.remove("active");
-    formWrap.style.display = "block";
-    closeModal();
-  });
-
-  form.addEventListener("submit", async function (e) {
-    e.preventDefault();
-
-    if (!validate()) return;
-
-    if (FORMSPREE_ENDPOINT.includes("YOUR_FORM_ID")) {
-      generalError.textContent = "Please add your Formspree endpoint in the JavaScript.";
-      return;
-    }
-
-    submitBtn.disabled = true;
-    submitText.style.display = "none";
-    submitLoading.style.display = "inline";
-    generalError.textContent = "";
-
-    try {
-      const response = await fetch(FORMSPREE_ENDPOINT, {
-        method: "POST",
-        body: new FormData(form),
-        headers: { "Accept": "application/json" }
-      });
-
-      if (response.ok) {
-        form.reset();
-        formWrap.style.display = "none";
-        success.classList.add("active");
-      } else {
-        generalError.textContent = "Unable to send your enquiry. Please try again.";
-      }
-    } catch (error) {
-      generalError.textContent = "Something went wrong. Please check your internet connection.";
-    } finally {
-      submitBtn.disabled = false;
-      submitText.style.display = "inline";
-      submitLoading.style.display = "none";
-    }
-  });
-})();
-
 </script>
 </body>
 </html>
