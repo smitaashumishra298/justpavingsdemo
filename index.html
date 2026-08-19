@@ -555,11 +555,13 @@
 <!---modal-->
 <!-- GET QUOTE POPUP -->
 
+<!-- GET QUOTE POPUP -->
+
 <div class="popup-overlay" id="quotePopup">
 
     <div class="quote-popup">
 
-        <button type="button" class="close-btn" id="closeQuote">
+        <button type="button" class="close-btn" id="closeQuote" aria-label="Close">
             &times;
         </button>
 
@@ -573,7 +575,7 @@
 
             <div class="form-group">
 
-                <label>
+                <label for="quoteName">
                     Name <span>*</span>
                 </label>
 
@@ -582,6 +584,7 @@
                     name="name"
                     id="quoteName"
                     placeholder="Enter your name"
+                    autocomplete="name"
                     required
                 >
 
@@ -592,7 +595,7 @@
 
             <div class="form-group">
 
-                <label>
+                <label for="quoteEmail">
                     Email <span>*</span>
                 </label>
 
@@ -601,6 +604,7 @@
                     name="email"
                     id="quoteEmail"
                     placeholder="Enter your email"
+                    autocomplete="email"
                     required
                 >
 
@@ -611,7 +615,7 @@
 
             <div class="form-group">
 
-                <label>
+                <label for="quotePhone">
                     Phone <span>*</span>
                 </label>
 
@@ -621,6 +625,8 @@
                     id="quotePhone"
                     placeholder="Enter 10 digit phone number"
                     maxlength="10"
+                    inputmode="numeric"
+                    autocomplete="tel"
                     required
                 >
 
@@ -631,7 +637,7 @@
 
             <div class="form-group">
 
-                <label>
+                <label for="quoteMessage">
                     Message <span>*</span>
                 </label>
 
@@ -658,6 +664,8 @@
     </div>
 
 </div>
+
+<!-- MODAL END -->
 
   <!--modal end-->
 
