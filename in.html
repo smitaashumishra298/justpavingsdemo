@@ -1,1218 +1,332 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <title>Get Quote Form</title>
-
-    <style>
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
-
-        body {
-            font-family: Arial, sans-serif;
-            background: #f5f5f5;
-        }
-
-        /* =========================
-           GET QUOTE BUTTON
-        ========================= */
-
-        .get-quote-btn {
-            display: inline-block;
-            padding: 14px 30px;
-            border: none;
-            border-radius: 5px;
-            background: #c9a227;
-            color: #fff;
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: 0.3s;
-        }
-
-        .get-quote-btn:hover {
-            background: #a98516;
-        }
-
-        /* =========================
-           MODAL
-        ========================= */
-
-        .quote-modal {
-            position: fixed;
-            inset: 0;
-            z-index: 99999;
-
-            display: none;
-            align-items: center;
-            justify-content: center;
-
-            padding: 20px;
-        }
-
-        .quote-modal.active {
-            display: flex;
-        }
-
-        /* Overlay */
-
-        .quote-overlay {
-            position: absolute;
-            inset: 0;
-
-            background: rgba(0, 0, 0, 0.75);
-            backdrop-filter: blur(4px);
-        }
-
-        /* Modal Box */
-
-        .quote-box {
-            position: relative;
-            z-index: 2;
-
-            width: 100%;
-            max-width: 560px;
-
-            max-height: 90vh;
-            overflow-y: auto;
-
-            padding: 35px;
-
-            background: #fff;
-            border-radius: 12px;
-
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-
-            animation: popupAnimation 0.3s ease;
-        }
-
-        @keyframes popupAnimation {
-
-            from {
-                opacity: 0;
-                transform: translateY(30px) scale(0.96);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0) scale(1);
-            }
-
-        }
-
-        /* Close Button */
-
-        .quote-close {
-            position: absolute;
-            top: 12px;
-            right: 16px;
-
-            width: 35px;
-            height: 35px;
-
-            border: none;
-            background: transparent;
-
-            color: #444;
-
-            font-size: 30px;
-            line-height: 30px;
-
-            cursor: pointer;
-        }
-
-        .quote-close:hover {
-            color: #c9a227;
-        }
-
-        /* Heading */
-
-        .quote-box h2 {
-            margin-bottom: 8px;
-
-            color: #222;
-
-            font-size: 30px;
-        }
-
-        .quote-subtitle {
-            margin-bottom: 25px;
-
-            color: #666;
-
-            font-size: 14px;
-            line-height: 1.5;
-        }
-
-        /* =========================
-           FORM
-        ========================= */
-
-        .form-group {
-            margin-bottom: 17px;
-        }
-
-        .form-group label {
-            display: block;
-
-            margin-bottom: 7px;
-
-            color: #333;
-
-            font-size: 14px;
-            font-weight: 600;
-        }
-
-        .form-group input,
-        .form-group textarea {
-            width: 100%;
-
-            padding: 12px 14px;
-
-            border: 1px solid #d5d5d5;
-            border-radius: 6px;
-
-            background: #fff;
-
-            color: #222;
-
-            font-family: inherit;
-            font-size: 15px;
-
-            outline: none;
-
-            transition: 0.2s;
-        }
-
-        .form-group textarea {
-            min-height: 90px;
-            resize: vertical;
-        }
-
-        .form-group input:focus,
-        .form-group textarea:focus {
-            border-color: #c9a227;
-
-            box-shadow:
-                0 0 0 3px rgba(201, 162, 39, 0.12);
-        }
-
-        /* Invalid */
-
-        .form-group input.invalid,
-        .form-group textarea.invalid {
-            border-color: #d93025;
-            background: #fff8f8;
-        }
-
-        /* Error */
-
-        .error-message {
-            display: block;
-
-            min-height: 16px;
-
-            margin-top: 5px;
-
-            color: #d93025;
-
-            font-size: 12px;
-        }
-
-        /* =========================
-           SUBMIT BUTTON
-        ========================= */
-
-        .submit-quote-btn {
-            width: 100%;
-
-            padding: 14px;
-
-            border: none;
-            border-radius: 6px;
-
-            background: #c9a227;
-            color: #fff;
-
-            font-size: 16px;
-            font-weight: 600;
-
-            cursor: pointer;
-
-            transition: 0.3s;
-        }
-
-        .submit-quote-btn:hover {
-            background: #a98516;
-        }
-
-        .submit-quote-btn:disabled {
-            opacity: 0.65;
-            cursor: not-allowed;
-        }
-
-        .submit-loader {
-            display: none;
-        }
-
-        /* General Error */
-
-        .form-general-error {
-            margin-top: 14px;
-
-            color: #d93025;
-
-            text-align: center;
-
-            font-size: 14px;
-            line-height: 1.5;
-        }
-
-        /* =========================
-           SUCCESS MESSAGE
-        ========================= */
-
-        .quote-success {
-            display: none;
-
-            padding: 30px 10px 15px;
-
-            text-align: center;
-        }
-
-        .quote-success.active {
-            display: block;
-        }
-
-        .success-icon {
-            width: 70px;
-            height: 70px;
-
-            margin: 0 auto 18px;
-
-            display: flex;
-            align-items: center;
-            justify-content: center;
-
-            border-radius: 50%;
-
-            background: #e8f5e9;
-            color: #2e7d32;
-
-            font-size: 40px;
-            font-weight: bold;
-        }
-
-        .quote-success h3 {
-            margin-bottom: 10px;
-
-            color: #222;
-
-            font-size: 28px;
-        }
-
-        .quote-success p {
-            margin-bottom: 25px;
-
-            color: #666;
-
-            font-size: 15px;
-            line-height: 1.6;
-        }
-
-        .success-close-btn {
-            padding: 11px 28px;
-
-            border: none;
-            border-radius: 5px;
-
-            background: #c9a227;
-            color: #fff;
-
-            font-size: 15px;
-
-            cursor: pointer;
-        }
-
-        /* =========================
-           MOBILE
-        ========================= */
-
-        @media (max-width: 576px) {
-
-            .quote-modal {
-                padding: 12px;
-            }
-
-            .quote-box {
-                padding: 28px 20px;
-                max-height: 92vh;
-            }
-
-            .quote-box h2 {
-                font-size: 25px;
-            }
-
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>JustPaving — Premium Porcelain &amp; Natural Stone Supplier</title>
+<meta name="description" content="JustPaving supplies premium porcelain slabs, pavers and natural stone — marble, granite, travertine and more. Trade &amp; retail supply across the UK. Request a free quote.">
+<meta name="theme-color" content="#2F2F2F">
+<link rel="icon" href="assets/logo-badge.png" type="image/png">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,500&family=Jost:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+<link rel="stylesheet" href="css/style.css">
+<script>(function(){function h(){var p=document.getElementById('preloader');if(p)p.classList.add('hidden');}window.addEventListener('load',h);setTimeout(h,1600);})();</script>
 </head>
-
 <body>
 
-
-    <!-- =========================
-         GET QUOTE BUTTON
-    ========================= -->
-
-    <button
-        type="button"
-        class="get-quote-btn"
-        id="openQuoteBtn">
-        Get Quote
-    </button>
-
-
-    <!-- =========================
-         POPUP MODAL
-    ========================= -->
-
-    <div
-        class="quote-modal"
-        id="quoteModal">
-
-        <!-- Background Overlay -->
-        <div
-            class="quote-overlay"
-            id="quoteOverlay">
-        </div>
-
-
-        <!-- Modal Box -->
-        <div class="quote-box">
-
-            <!-- Close -->
-            <button
-                type="button"
-                class="quote-close"
-                id="closeQuoteBtn">
-                &times;
-            </button>
-
-
-            <!-- =====================
-                 FORM SECTION
-            ====================== -->
-
-            <div id="quoteFormWrapper">
-
-                <h2>Get a Quote</h2>
-
-                <p class="quote-subtitle">
-                    Fill in your details and we will contact you shortly.
-                </p>
-
-
-                <form
-                    id="quoteForm"
-                    novalidate>
-
-
-                    <!-- FULL NAME -->
-
-                    <div class="form-group">
-
-                        <label for="fullName">
-                            Full Name *
-                        </label>
-
-                        <input
-                            type="text"
-                            id="fullName"
-                            name="Full Name"
-                            placeholder="Enter your full name"
-                            autocomplete="name">
-
-                        <small
-                            class="error-message"
-                            id="fullNameError">
-                        </small>
-
-                    </div>
-
-
-                    <!-- COMPANY NAME -->
-
-                    <div class="form-group">
-
-                        <label for="companyName">
-                            Company Name *
-                        </label>
-
-                        <input
-                            type="text"
-                            id="companyName"
-                            name="Company Name"
-                            placeholder="Enter company name"
-                            autocomplete="organization">
-
-                        <small
-                            class="error-message"
-                            id="companyNameError">
-                        </small>
-
-                    </div>
-
-
-                    <!-- ADDRESS -->
-
-                    <div class="form-group">
-
-                        <label for="address">
-                            Address *
-                        </label>
-
-                        <textarea
-                            id="address"
-                            name="Address"
-                            rows="3"
-                            placeholder="Enter your address"
-                            autocomplete="street-address">
-                        </textarea>
-
-                        <small
-                            class="error-message"
-                            id="addressError">
-                        </small>
-
-                    </div>
-
-
-                    <!-- PHONE -->
-
-                    <div class="form-group">
-
-                        <label for="phone">
-                            Phone Number *
-                        </label>
-
-                        <input
-                            type="tel"
-                            id="phone"
-                            name="Phone Number"
-                            placeholder="Enter 10 digit phone number"
-                            maxlength="10"
-                            inputmode="numeric"
-                            autocomplete="tel">
-
-                        <small
-                            class="error-message"
-                            id="phoneError">
-                        </small>
-
-                    </div>
-
-
-                    <!-- MESSAGE -->
-
-                    <div class="form-group">
-
-                        <label for="message">
-                            Message *
-                        </label>
-
-                        <textarea
-                            id="message"
-                            name="Message"
-                            rows="4"
-                            placeholder="Tell us what you need...">
-                        </textarea>
-
-                        <small
-                            class="error-message"
-                            id="messageError">
-                        </small>
-
-                    </div>
-
-
-                    <!-- SUBMIT -->
-
-                    <button
-                        type="submit"
-                        class="submit-quote-btn"
-                        id="submitQuoteBtn">
-
-                        <span id="submitText">
-                            Send Enquiry
-                        </span>
-
-                        <span id="submitLoader">
-                            Sending...
-                        </span>
-
-                    </button>
-
-
-                    <!-- GENERAL ERROR -->
-
-                    <div
-                        class="form-general-error"
-                        id="formGeneralError">
-                    </div>
-
-                </form>
-
-            </div>
-
-
-            <!-- =====================
-                 SUCCESS SECTION
-            ====================== -->
-
-            <div
-                class="quote-success"
-                id="quoteSuccess">
-
-                <div class="success-icon">
-                    ✓
-                </div>
-
-                <h3>
-                    Thank You!
-                </h3>
-
-                <p>
-                    Your enquiry has been sent successfully.
-                    We will contact you shortly.
-                </p>
-
-                <button
-                    type="button"
-                    class="success-close-btn"
-                    id="successCloseBtn">
-
-                    Close
-
-                </button>
-
-            </div>
-
-        </div>
-
+<!-- ===== Preloader ===== -->
+<div id="preloader"><div class="pl-mark">Just<span>Paving</span></div><div class="pl-bar"><i></i></div></div>
+
+<!-- ===== Top bar ===== -->
+<div class="topbar"><div class="container">
+  <div class="tb-left">
+    <span><i class="fa-solid fa-phone"></i><a href="tel:+442079460958">+44 20 7946 0958</a></span>
+    <span><i class="fa-solid fa-envelope"></i><a href="mailto:sales@justpaving.co.uk">sales@justpaving.co.uk</a></span>
+    <span><i class="fa-solid fa-clock"></i>Mon – Fri: 8:00 – 18:00 · Sat: 9:00 – 14:00</span>
+  </div>
+  <div class="tb-right">
+    <a href="contact.html"><i class="fa-solid fa-download"></i>Catalogue</a>
+    <span class="tb-social"><a href="#" aria-label="Facebook"><i class="fa-brands fa-facebook-f"></i></a><a href="#" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a><a href="#" aria-label="LinkedIn"><i class="fa-brands fa-linkedin-in"></i></a><a href="#" aria-label="Pinterest"><i class="fa-brands fa-pinterest-p"></i></a></span>
+  </div>
+</div></div>
+
+<!-- ===== Header (identical on every page) ===== -->
+<header class="site-header"><div class="container nav-inner">
+  <a class="brand" href="index.html" aria-label="JustPaving home"><img src="assets/logo-badge.png" alt="JustPaving — Sandstone & Porcelain"></a>
+  <nav aria-label="Primary"><ul class="main-nav">
+    <li class="active"><a href="index.html">Home</a></li>
+    <li><a href="about.html">About</a></li>
+    <li class="has-mega">
+      <a href="products.html">Products <i class="fa-solid fa-chevron-down" style="font-size:.62rem"></i></a>
+      <div class="mega"><div class="mega-grid">
+        <div class="mega-col"><h5>Porcelain</h5><ul>
+          <li><a href="products.html"><i class="fa-solid fa-layer-group"></i>Porcelain Slabs</a></li>
+          <li><a href="products.html"><i class="fa-solid fa-border-all"></i>Porcelain Pavers</a></li>
+          <li><a href="products.html"><i class="fa-solid fa-sun"></i>Outdoor Porcelain</a></li>
+          <li><a href="products.html"><i class="fa-solid fa-house"></i>Indoor Porcelain</a></li>
+        </ul></div>
+        <div class="mega-col"><h5>Natural Stone</h5><ul>
+          <li><a href="products.html"><i class="fa-solid fa-mountain"></i>Natural Stone</a></li>
+          <li><a href="products.html"><i class="fa-solid fa-gem"></i>Marble</a></li>
+          <li><a href="products.html"><i class="fa-solid fa-cube"></i>Granite</a></li>
+          <li><a href="products.html"><i class="fa-solid fa-stroopwafel"></i>Limestone</a></li>
+          <li><a href="products.html"><i class="fa-solid fa-water"></i>Sandstone</a></li>
+          <li><a href="products.html"><i class="fa-solid fa-th-large"></i>Travertine</a></li>
+          <li><a href="products.html"><i class="fa-solid fa-clone"></i>Slate</a></li>
+          <li><a href="products.html"><i class="fa-solid fa-diamond"></i>Quartz</a></li>
+        </ul></div>
+        <div class="mega-col"><h5>Finishing</h5><ul>
+          <li><a href="products.html"><i class="fa-solid fa-grip"></i>Wall Cladding</a></li>
+          <li><a href="products.html"><i class="fa-solid fa-ruler-combined"></i>Coping Stones</a></li>
+          <li><a href="products.html"><i class="fa-solid fa-stairs"></i>Steps &amp; Edging</a></li>
+          <li><a href="products.html"><i class="fa-solid fa-toolbox"></i>Accessories</a></li>
+        </ul></div>
+        <a class="mega-feature" href="products.html">
+          <img src="https://images.unsplash.com/photo-1600421495550-158936f5ecfa?auto=format&fit=crop&w=800&q=80" alt="Featured collection">
+          <div class="mf-body"><span>Featured</span><h4>The Signature Marble Collection</h4><span style="color:var(--gold)">Explore all products <i class="fa-solid fa-arrow-right"></i></span></div>
+        </a>
+      </div></div>
+    </li>
+    <li><a href="index.html#projects">Projects</a></li>
+    <li><a href="gallery.html">Gallery</a></li>
+    <li><a href="index.html#services">Services</a></li>
+    <li><a href="index.html#blog">Blog</a></li>
+    <li><a href="contact.html">Contact</a></li>
+  </ul></nav>
+  <div class="nav-actions">
+    
+    <a class="btn btn-gold d-none d-sm-inline-flex" href="contact.html">Get Quote</a>
+    <button class="burger" id="burger" aria-label="Open menu"><i class="fa-solid fa-bars"></i></button>
+  </div>
+</div></header>
+
+<!-- ===== Mobile drawer (identical on every page) ===== -->
+<div class="md-overlay"></div>
+<aside class="mobile-drawer" aria-label="Mobile menu">
+  <div class="md-head"><img src="assets/logo-badge.png" alt="JustPaving" style="height:44px;border-radius:10px"><button class="close" id="drawerClose" aria-label="Close"><i class="fa-solid fa-xmark"></i></button></div>
+  <a href="index.html">Home</a>
+  <a href="about.html">About Us</a>
+  <div class="md-toggle"><span>Products</span><i class="fa-solid fa-plus"></i></div>
+  <div class="md-sub">
+    <a href="products.html">All Products</a>
+    <a href="products.html">Porcelain Slabs</a><a href="products.html">Outdoor Porcelain</a>
+    <a href="products.html">Marble</a><a href="products.html">Granite</a><a href="products.html">Travertine</a>
+  </div>
+  <a href="index.html#projects">Projects</a>
+  <a href="gallery.html">Gallery</a>
+  <a href="index.html#services">Services</a>
+  <a href="index.html#blog">Blog / News</a>
+  <a href="contact.html">Contact Us</a>
+  <a class="btn btn-gold md-cta" href="contact.html" style="justify-content:center">Request a Quote</a>
+</aside>
+
+<!-- ===== HERO ===== -->
+<section class="hero" id="home">
+
+  <!-- Background Slider -->
+  <div class="hero-slider">
+    <div class="hero-slide active">
+      <img src="https://images.unsplash.com/photo-1648881806148-e5c51179c826?auto=format&fit=crop&w=1920&q=80"
+           alt="Luxury marble interior">
     </div>
 
-
-    <!-- =========================
-         JAVASCRIPT
-    ========================= -->
-
-    <script>
-
-        /* =====================================
-           FORMSPREE ENDPOINT
-        ===================================== */
-
-        const FORMSPREE_ENDPOINT =
-            "https://formspree.io/f/YOUR_FORM_ID";
-
-
-        /* =====================================
-           ELEMENTS
-        ===================================== */
-
-        const quoteModal =
-            document.getElementById("quoteModal");
-
-        const openQuoteBtn =
-            document.getElementById("openQuoteBtn");
-
-        const closeQuoteBtn =
-            document.getElementById("closeQuoteBtn");
-
-        const quoteOverlay =
-            document.getElementById("quoteOverlay");
-
-        const quoteForm =
-            document.getElementById("quoteForm");
-
-        const quoteFormWrapper =
-            document.getElementById("quoteFormWrapper");
-
-        const quoteSuccess =
-            document.getElementById("quoteSuccess");
-
-        const successCloseBtn =
-            document.getElementById("successCloseBtn");
-
-        const submitQuoteBtn =
-            document.getElementById("submitQuoteBtn");
-
-        const submitText =
-            document.getElementById("submitText");
-
-        const submitLoader =
-            document.getElementById("submitLoader");
-
-        const formGeneralError =
-            document.getElementById("formGeneralError");
-
-
-        /* FORM FIELDS */
-
-        const fullName =
-            document.getElementById("fullName");
-
-        const companyName =
-            document.getElementById("companyName");
-
-        const address =
-            document.getElementById("address");
-
-        const phone =
-            document.getElementById("phone");
-
-        const message =
-            document.getElementById("message");
-
-
-        /* =====================================
-           OPEN MODAL
-        ===================================== */
-
-        openQuoteBtn.addEventListener(
-            "click",
-            function () {
-
-                quoteModal.classList.add("active");
-
-                document.body.style.overflow = "hidden";
-
-                setTimeout(function () {
-                    fullName.focus();
-                }, 200);
-
-            }
-        );
-
-
-        /* =====================================
-           CLOSE MODAL
-        ===================================== */
-
-        function closeQuoteModal() {
-
-            quoteModal.classList.remove("active");
-
-            document.body.style.overflow = "";
-
-        }
-
-
-        closeQuoteBtn.addEventListener(
-            "click",
-            closeQuoteModal
-        );
-
-
-        quoteOverlay.addEventListener(
-            "click",
-            closeQuoteModal
-        );
-
-
-        /* ESC KEY */
-
-        document.addEventListener(
-            "keydown",
-            function (event) {
-
-                if (event.key === "Escape") {
-
-                    closeQuoteModal();
-
-                }
-
-            }
-        );
-
-
-        /* =====================================
-           PHONE ONLY NUMBERS
-        ===================================== */
-
-        phone.addEventListener(
-            "input",
-            function () {
-
-                this.value =
-                    this.value
-                    .replace(/\D/g, "")
-                    .slice(0, 10);
-
-            }
-        );
-
-
-        /* =====================================
-           ERROR FUNCTIONS
-        ===================================== */
-
-        function setError(
-            input,
-            errorElement,
-            errorMessage
-        ) {
-
-            input.classList.add("invalid");
-
-            errorElement.textContent =
-                errorMessage;
-
-        }
-
-
-        function clearError(
-            input,
-            errorElement
-        ) {
-
-            input.classList.remove("invalid");
-
-            errorElement.textContent = "";
-
-        }
-
-
-        /* =====================================
-           VALIDATE FORM
-        ===================================== */
-
-        function validateForm() {
-
-            let isValid = true;
-
-            formGeneralError.textContent = "";
-
-
-            /* ===============================
-               FULL NAME
-            =============================== */
-
-            const nameValue =
-                fullName.value.trim();
-
-
-            if (nameValue === "") {
-
-                setError(
-                    fullName,
-                    document.getElementById(
-                        "fullNameError"
-                    ),
-                    "Full Name is required."
-                );
-
-                isValid = false;
-
-            }
-
-            else if (
-                !/^[A-Za-zÀ-ÿ\s.'-]{2,60}$/
-                .test(nameValue)
-            ) {
-
-                setError(
-                    fullName,
-                    document.getElementById(
-                        "fullNameError"
-                    ),
-                    "Please enter a valid full name."
-                );
-
-                isValid = false;
-
-            }
-
-            else {
-
-                clearError(
-                    fullName,
-                    document.getElementById(
-                        "fullNameError"
-                    )
-                );
-
-            }
-
-
-            /* ===============================
-               COMPANY NAME
-            =============================== */
-
-            const companyValue =
-                companyName.value.trim();
-
-
-            if (companyValue === "") {
-
-                setError(
-                    companyName,
-                    document.getElementById(
-                        "companyNameError"
-                    ),
-                    "Company Name is required."
-                );
-
-                isValid = false;
-
-            }
-
-            else if (
-                companyValue.length < 2 ||
-                companyValue.length > 100
-            ) {
-
-                setError(
-                    companyName,
-                    document.getElementById(
-                        "companyNameError"
-                    ),
-                    "Company Name must be between 2 and 100 characters."
-                );
-
-                isValid = false;
-
-            }
-
-            else {
-
-                clearError(
-                    companyName,
-                    document.getElementById(
-                        "companyNameError"
-                    )
-                );
-
-            }
-
-
-            /* ===============================
-               ADDRESS
-            =============================== */
-
-            const addressValue =
-                address.value.trim();
-
-
-            if (addressValue === "") {
-
-                setError(
-                    address,
-                    document.getElementById(
-                        "addressError"
-                    ),
-                    "Address is required."
-                );
-
-                isValid = false;
-
-            }
-
-            else if (
-                addressValue.length < 10
-            ) {
-
-                setError(
-                    address,
-                    document.getElementById(
-                        "addressError"
-                    ),
-                    "Please enter a complete address."
-                );
-
-                isValid = false;
-
-            }
-
-            else if (
-                addressValue.length > 300
-            ) {
-
-                setError(
-                    address,
-                    document.getElementById(
-                        "addressError"
-                    ),
-                    "Address cannot exceed 300 characters."
-                );
-
-                isValid = false;
-
-            }
-
-            else {
-
-                clearError(
-                    address,
-                    document.getElementById(
-                        "addressError"
-                    )
-                );
-
-            }
-
-
-            /* ===============================
-               PHONE
-            =============================== */
-
-            const phoneValue =
-                phone.value.trim();
-
-
-            if (phoneValue === "") {
-
-                setError(
-                    phone,
-                    document.getElementById(
-                        "phoneError"
-                    ),
-                    "Phone Number is required."
-                );
-
-                isValid = false;
-
-            }
-
-            else if (
-                !/^[6-9][0-9]{9}$/
-                .test(phoneValue)
-            ) {
-
-                setError(
-                    phone,
-                    document.getElementById(
-                        "phoneError"
-                    ),
-                    "Enter a valid 10-digit Indian mobile number."
-                );
-
-                isValid = false;
-
-            }
-
-            else {
-
-                clearError(
-                    phone,
-                    document.getElementById(
-                        "phoneError"
-                    )
-                );
-
-            }
-
-
-            /* ===============================
-               MESSAGE
-            =============================== */
-
-            const messageValue =
-                message.value.trim();
-
-
-            if (messageValue === "") {
-
-                setError(
-                    message,
-                    document.getElementById(
-                        "messageError"
-                    ),
-                    "Message is required."
-                );
-
-                isValid = false;
-
-            }
-
-            else if (
-                messageValue.length < 10
-            ) {
-
-                setError(
-                    message,
-                    document.getElementById(
-                        "messageError"
-                    ),
-                    "Message must contain at least 10 characters."
-                );
-
-                isValid = false;
-
-            }
-
-            else if (
-                messageValue.length > 1000
-            ) {
-
-                setError(
-                    message,
-                    document.getElementById(
-                        "messageError"
-                    ),
-                    "Message cannot exceed 1000 characters."
-                );
-
-                isValid = false;
-
-            }
-
-            else {
-
-                clearError(
-                    message,
-                    document.getElementById(
-                        "messageError"
-                    )
-                );
-
-            }
-
-
-            return isValid;
-
-        }
-
-
-        /* =====================================
-           SUBMIT FORM
-        ===================================== */
-
-        quoteForm.addEventListener(
-            "submit",
-            async function (event) {
-
-                event.preventDefault();
-
-
-                /* VALIDATION */
-
-                if (!validateForm()) {
-
-                    return;
-
-                }
-
-
-                /* LOADING */
-
-                submitQuoteBtn.disabled = true;
-
-                submitText.style.display =
-                    "none";
-
-                submitLoader.style.display =
-                    "inline";
-
-
-                try {
-
-                    const formData =
-                        new FormData(quoteForm);
-
-
-                    const response =
-                        await fetch(
-                            FORMSPREE_ENDPOINT,
-                            {
-                                method: "POST",
-
-                                body: formData,
-
-                                headers: {
-                                    "Accept":
-                                        "application/json"
-                                }
-                            }
-                        );
-
-
-                    /* SUCCESS */
-
-                    if (response.ok) {
-
-                        quoteFormWrapper.style.display =
-                            "none";
-
-                        quoteSuccess.classList.add(
-                            "active"
-                        );
-
-                        quoteForm.reset();
-
-                    }
-
-
-                    /* ERROR */
-
-                    else {
-
-                        formGeneralError.textContent =
-                            "Unable to send your enquiry. Please try again.";
-
-                    }
-
-                }
-
-
-                catch (error) {
-
-                    formGeneralError.textContent =
-                        "Something went wrong. Please check your internet connection.";
-
-                }
-
-
-                /* RESET BUTTON */
-
-                submitQuoteBtn.disabled = false;
-
-                submitText.style.display =
-                    "inline";
-
-                submitLoader.style.display =
-                    "none";
-
-            }
-        );
-
-
-        /* =====================================
-           SUCCESS CLOSE
-        ===================================== */
-
-        successCloseBtn.addEventListener(
-            "click",
-            function () {
-
-                quoteSuccess.classList.remove(
-                    "active"
-                );
-
-                quoteFormWrapper.style.display =
-                    "block";
-
-                closeQuoteModal();
-
-            }
-        );
-
-    </script>
-
+    <div class="hero-slide">
+      <img src="https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&w=1920&q=80"
+           alt="Luxury stone interior">
+    </div>
+
+    <div class="hero-slide">
+      <img src="https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?auto=format&fit=crop&w=1920&q=80"
+           alt="Premium marble kitchen">
+    </div>
+
+    <div class="hero-overlay"></div>
+  </div>
+
+  <div class="container hero-inner">
+    <div class="reveal">
+
+      <div class="eyebrow">Sandstone &amp; Porcelain · Est. 2001</div>
+
+      <h1>Surfaces that <em>define</em> extraordinary spaces</h1>
+
+      <p>
+        From book-matched porcelain slabs to hand-selected natural stone,
+        we supply architects, developers and homeowners with materials
+        of uncompromising beauty and quality.
+      </p>
+
+      <div class="hero-cta">
+        <a href="products.html" class="btn btn-gold">
+          Explore Collections
+          <i class="fa-solid fa-arrow-right"></i>
+        </a>
+
+        <a href="contact.html" class="btn btn-ghost-light">
+         Get Quote
+        </a>
+      </div>
+
+      <div class="hero-badges">
+        <div>
+          <div class="n">25+</div>
+          <div class="l">Years Experience</div>
+        </div>
+
+        <div>
+          <div class="n">160+</div>
+          <div class="l">Stone Ranges</div>
+        </div>
+
+        <div>
+          <div class="n">4,200+</div>
+          <div class="l">Projects Delivered</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Slider Navigation -->
+  <div class="hero-slider-dots">
+    <span class="slider-dot active" data-slide="0"></span>
+    <span class="slider-dot" data-slide="1"></span>
+    <span class="slider-dot" data-slide="2"></span>
+  </div>
+
+ 
+
+</section>
+<!-- ===== INTRO ===== -->
+<section class="section"><div class="container split">
+  <div class="intro-media reveal"><img src="https://images.unsplash.com/photo-1600421495550-158936f5ecfa?auto=format&fit=crop&w=1000&q=80" alt="Marble feature wall"><div class="stamp float"><div class="big">A+</div><small>Graded Quality</small></div></div>
+  <div class="reveal d1">
+    <div class="eyebrow">Who We Are</div>
+    <h2>A quarter century of surface craftsmanship</h2>
+    <p class="lead">JustPaving began with a simple belief — that great architecture deserves great materials. Today we curate one of the UK's finest collections of porcelain and natural stone.</p>
+    <p>Every slab in our range is chosen by hand for its tone, veining and integrity. We work directly with the most respected quarries and factories across Europe.</p>
+    <ul class="ticks"><li><i class="fa-solid fa-circle-check"></i> Directly sourced ranges</li><li><i class="fa-solid fa-circle-check"></i> Trade &amp; retail supply</li><li><i class="fa-solid fa-circle-check"></i> Nationwide delivery</li><li><i class="fa-solid fa-circle-check"></i> Full-size samples</li></ul>
+    <a href="about.html" class="btn btn-outline">More About Us <i class="fa-solid fa-arrow-right"></i></a>
+  </div>
+</div></section>
+
+<!-- ===== FEATURED CATEGORIES ===== -->
+<section class="section bg-light" id="products-preview"><div class="container">
+  <div class="sec-head center reveal" style="margin-bottom:3rem"><div class="eyebrow center">Our Collections</div><h2>Featured product categories</h2><p class="lead">Explore our most sought-after surfaces — engineered porcelain and natural stone.</p></div>
+  <div class="cards grid-4" id="featGrid"></div>
+  <div class="text-center reveal" style="margin-top:2.6rem"><a href="products.html" class="btn btn-dark">View All 16 Categories <i class="fa-solid fa-arrow-right"></i></a></div>
+</div></section>
+
+<!-- ===== WHY ===== -->
+<section class="section" id="why"><div class="container">
+  <div class="sec-head center reveal" style="margin-bottom:3rem"><div class="eyebrow center">The JustPaving Difference</div><h2>Why clients choose us</h2></div>
+  <div class="cards grid-4" id="whyGrid"></div>
+</div></section>
+
+<!-- ===== STATS ===== -->
+<section class="section stats"><div class="container"><div class="stat-div" id="statGrid"></div></div></section>
+
+<!-- ===== PROJECTS ===== -->
+<section class="section" id="projects"><div class="container">
+  <div class="sec-head center reveal" style="margin-bottom:3rem"><div class="eyebrow center">Portfolio</div><h2>Latest projects</h2><p class="lead">A glimpse of the spaces our materials have helped bring to life.</p></div>
+  <div class="cards grid-3" id="projGrid" data-limit="3"></div>
+</div></section>
+
+<!-- ===== GALLERY PREVIEW ===== -->
+<section class="section bg-light"><div class="container">
+  <div class="sec-head center reveal" style="margin-bottom:3rem"><div class="eyebrow center">Inspiration</div><h2>Gallery preview</h2></div>
+  <div class="gallery-grid reveal" id="galGrid" data-limit="6"></div>
+  <div class="text-center reveal" style="margin-top:2.6rem"><a href="gallery.html" class="btn btn-outline">Open Full Gallery <i class="fa-solid fa-arrow-right"></i></a></div>
+</div></section>
+
+<!-- ===== TESTIMONIALS ===== -->
+<section class="section testi"><div class="container">
+  <div class="sec-head center reveal" style="margin-bottom:3rem"><div class="eyebrow center">Kind Words</div><h2>What our clients say</h2></div>
+  <div class="cards grid-3" id="testiGrid"></div>
+</div></section>
+
+<!-- ===== BRANDS ===== -->
+<section class="section" style="padding-top:0"><div class="container"><p class="text-center reveal" style="letter-spacing:.18em;text-transform:uppercase;font-size:.78rem;color:var(--muted);margin-bottom:2rem">Brands we work with</p><div class="brands reveal" id="brandGrid"></div></div></section>
+
+<!-- ===== SERVICES ===== -->
+<section class="section bg-light" id="services"><div class="container">
+  <div class="sec-head center reveal" style="margin-bottom:3rem"><div class="eyebrow center">End-to-End</div><h2>A complete surface service</h2></div>
+  <div class="cards grid-3" id="servGrid"></div>
+</div></section>
+
+<!-- ===== BLOG ===== -->
+<section class="section" id="blog"><div class="container">
+  <div class="sec-head center reveal" style="margin-bottom:3rem"><div class="eyebrow center">From The Journal</div><h2>Insights, guides &amp; news</h2></div>
+  <div class="cards grid-3" id="blogGrid"></div>
+</div></section>
+
+<!-- ===== CTA ===== -->
+<section class="section cta-band"><div class="container reveal">
+  <div class="eyebrow center" style="color:var(--gold)">Ready When You Are</div>
+  <h2>Let's bring your vision to the surface</h2>
+  <p>Whether you're specifying for a landmark development or reimagining a single room, our team is ready to help you choose the perfect material.</p>
+  <div class="hero-cta justify-content-center"><a href="contact.html" class="btn btn-gold btn-pulse">Request a Free Quote <i class="fa-solid fa-arrow-right"></i></a><a href="contact.html" class="btn btn-ghost-light">Download Catalogue <i class="fa-solid fa-download"></i></a></div>
+</div></section>
+
+<!-- ===== FOOTER (identical on every page) ===== -->
+<footer class="site-footer"><div class="container"><div class="f-grid">
+  <div><a class="brand" href="index.html"><img src="assets/logo-badge.png" alt="JustPaving"></a><p>Premium porcelain and natural stone for architects, developers and discerning homeowners. Sourced with care, supplied with expertise across the UK.</p><div class="f-social"><a href="#" aria-label="Facebook"><i class="fa-brands fa-facebook-f"></i></a><a href="#" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a><a href="#" aria-label="LinkedIn"><i class="fa-brands fa-linkedin-in"></i></a><a href="#" aria-label="Pinterest"><i class="fa-brands fa-pinterest-p"></i></a></div></div>
+  <div><h5>Company</h5><ul><li><a href="about.html"><i class="fa-solid fa-chevron-right"></i>About Us</a></li><li><a href="index.html#why"><i class="fa-solid fa-chevron-right"></i>Why Choose Us</a></li><li><a href="index.html#projects"><i class="fa-solid fa-chevron-right"></i>Projects</a></li><li><a href="index.html#services"><i class="fa-solid fa-chevron-right"></i>Services</a></li><li><a href="index.html#blog"><i class="fa-solid fa-chevron-right"></i>Blog / News</a></li></ul></div>
+  <div><h5>Products</h5><ul><li><a href="products.html"><i class="fa-solid fa-chevron-right"></i>Porcelain Slabs</a></li><li><a href="products.html"><i class="fa-solid fa-chevron-right"></i>Outdoor Porcelain</a></li><li><a href="products.html"><i class="fa-solid fa-chevron-right"></i>Marble</a></li><li><a href="products.html"><i class="fa-solid fa-chevron-right"></i>Granite</a></li><li><a href="products.html"><i class="fa-solid fa-chevron-right"></i>View All</a></li></ul></div>
+  <div><h5>Get In Touch</h5><ul class="f-contact"><li><i class="fa-solid fa-location-dot"></i><span>Unit 12, Stonemasons Yard, London EC1V 9BX, United Kingdom</span></li><li><i class="fa-solid fa-phone"></i><a href="tel:+442079460958">+44 20 7946 0958</a></li><li><i class="fa-solid fa-envelope"></i><a href="mailto:sales@justpaving.co.uk">sales@justpaving.co.uk</a></li><li><i class="fa-solid fa-clock"></i><span>Mon – Fri: 8:00 – 18:00 · Sat: 9:00 – 14:00</span></li></ul><form class="f-news" onsubmit="return false;" aria-label="Newsletter"><input type="email" placeholder="Your email for updates" aria-label="Email"><button type="submit" aria-label="Subscribe"><i class="fa-solid fa-arrow-right"></i></button></form></div>
+</div></div><div class="container"><div class="f-bottom"><span>© <span id="yr"></span> JustPaving · Sandstone &amp; Porcelain. All rights reserved.</span><span><a href="#">Privacy Policy</a> · <a href="#">Terms &amp; Conditions</a> · <a href="index.html">Home</a></span></div></div></footer>
+
+<!-- Floating buttons + WhatsApp + lightbox (identical on every page) -->
+<a class="float-quote" href="contact.html"><i class="fa-solid fa-file-lines"></i><span>Request a Quote</span></a>
+<button id="toTop" aria-label="Back to top"><i class="fa-solid fa-arrow-up"></i></button>
+<div class="wa-widget" id="waWidget">
+  <div class="wa-card" id="waCard" role="dialog" aria-label="WhatsApp chat">
+    <div class="wa-card-head"><div class="wa-avatar"><i class="fa-brands fa-whatsapp"></i></div><div class="wa-head-txt"><strong>JustPaving</strong><span><i class="wa-dot"></i> Typically replies within minutes</span></div><button class="wa-close" id="waClose" aria-label="Close chat">&times;</button></div>
+    <div class="wa-card-body"><div class="wa-bubble"><span class="wa-name">JustPaving Team</span>Hi there! 👋<br>Looking for premium porcelain or natural stone? Message us and we'll help you choose the perfect surface.<span class="wa-time" id="waTime"></span></div></div>
+    <a class="wa-start" href="https://wa.me/442079460958?text=Hi%20JustPaving,%20I'd%20like%20to%20enquire%20about%20your%20stone%20%26%20porcelain%20products." target="_blank" rel="noopener"><i class="fa-brands fa-whatsapp"></i> Start Chat</a>
+  </div>
+  <button class="wa-fab" id="waFab" aria-label="Chat on WhatsApp"><i class="fa-brands fa-whatsapp"></i><span class="wa-badge">1</span></button>
+</div>
+<div class="lightbox" id="lightbox"><button class="lb-close" id="lbClose" aria-label="Close">&times;</button><img id="lbImg" src="" alt="Gallery preview"></div>
+
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="js/main.js"></script>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+
+  const slides = document.querySelectorAll(".hero-slide");
+  const dots = document.querySelectorAll(".slider-dot");
+
+  let currentSlide = 0;
+  let sliderInterval;
+
+  function showSlide(index) {
+
+    slides.forEach((slide, i) => {
+      slide.classList.toggle("active", i === index);
+    });
+
+    dots.forEach((dot, i) => {
+      dot.classList.toggle("active", i === index);
+    });
+
+    currentSlide = index;
+  }
+
+  function nextSlide() {
+    currentSlide = (currentSlide + 1) % slides.length;
+    showSlide(currentSlide);
+  }
+
+  function startSlider() {
+    sliderInterval = setInterval(nextSlide, 6000);
+  }
+
+  function resetSlider() {
+    clearInterval(sliderInterval);
+    startSlider();
+  }
+
+  dots.forEach((dot) => {
+
+    dot.addEventListener("click", function () {
+
+      const index = parseInt(this.dataset.slide);
+
+      showSlide(index);
+      resetSlider();
+
+    });
+
+  });
+
+  showSlide(0);
+  startSlider();
+
+});
+</script>
 </body>
 </html>
