@@ -1,177 +1,297 @@
-*{margin:0;padding:0;box-sizing:border-box}
-
-.quote-btn{
-    background:#c9a227;
-    color:#fff;
-    border:0;
-    padding:14px 30px;
-    font-size:16px;
-    font-weight:600;
-    border-radius:4px;
-    cursor:pointer;
-    transition:.3s
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
 }
 
-.quote-btn:hover{background:#a98617}
-
-.popup-overlay{
-    position:fixed;
-    inset:0;
-    width:100%;
-    height:100%;
-    background:rgba(0,0,0,.65);
-    display:none;
-    justify-content:center;
-    align-items:center;
-    padding:20px;
-    z-index:9999;
-    overflow-y:auto;
+.quote-btn {
+    background: #c9a227;
+    color: #fff;
+    border: 0;
+    padding: 14px 30px;
+    font-size: 16px;
+    font-weight: 600;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: 0.3s;
 }
 
-.popup-overlay.active{display:flex}
-
-.quote-popup{
-    position:relative;
-    width:100%;
-    max-width:500px;
-    max-height:90vh;
-    overflow-y:auto;
-    background:#fff;
-    padding:35px;
-    border-radius:8px;
-    box-shadow:0 15px 50px rgba(0,0,0,.25);
-    animation:popupAnimation .3s ease;
+.quote-btn:hover {
+    background: #a98617;
 }
 
-@keyframes popupAnimation{
-    from{
-        opacity:0;
-        transform:translateY(-30px) scale(.95)
+
+/* =========================
+   POPUP OVERLAY
+========================= */
+
+.popup-overlay {
+    position: fixed;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.65);
+
+    display: none;
+
+    justify-content: center;
+    align-items: center;
+
+    padding: 20px;
+
+    z-index: 99999;
+
+    overflow-y: auto;
+}
+
+.popup-overlay.active {
+    display: flex;
+}
+
+
+/* =========================
+   POPUP
+========================= */
+
+.quote-popup {
+    position: relative;
+
+    width: 100%;
+    max-width: 500px;
+
+    max-height: 90vh;
+
+    overflow-y: auto;
+
+    background: #fff;
+
+    padding: 35px;
+
+    border-radius: 8px;
+
+    box-shadow: 0 15px 50px rgba(0, 0, 0, 0.25);
+
+    animation: popupAnimation 0.3s ease;
+}
+
+
+@keyframes popupAnimation {
+
+    from {
+        opacity: 0;
+        transform: translateY(-30px) scale(0.95);
     }
-    to{
-        opacity:1;
-        transform:translateY(0) scale(1)
+
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
     }
+
 }
 
-.quote-popup h2{
-    font-size:28px;
-    color:#222;
-    margin-bottom:8px
+
+/* =========================
+   HEADING
+========================= */
+
+.quote-popup h2 {
+    font-size: 28px;
+    color: #222;
+    margin-bottom: 8px;
 }
 
-.popup-subtitle{
-    color:#777;
-    font-size:14px;
-    margin-bottom:25px
+.popup-subtitle {
+    color: #777;
+    font-size: 14px;
+    margin-bottom: 25px;
+    line-height: 1.5;
 }
 
-.close-btn{
-    position:absolute;
-    top:12px;
-    right:15px;
-    border:0;
-    background:transparent;
-    font-size:30px;
-    color:#555;
-    cursor:pointer;
-    line-height:1;
+
+/* =========================
+   CLOSE BUTTON
+========================= */
+
+.close-btn {
+    position: absolute;
+
+    top: 12px;
+    right: 15px;
+
+    border: 0;
+    background: transparent;
+
+    font-size: 30px;
+
+    color: #555;
+
+    cursor: pointer;
+
+    line-height: 1;
 }
 
-.close-btn:hover{color:#000}
-
-.form-group{margin-bottom:18px}
-
-.form-group label{
-    display:block;
-    font-size:14px;
-    font-weight:600;
-    color:#333;
-    margin-bottom:7px
+.close-btn:hover {
+    color: #000;
 }
 
-.form-group label span{color:#d00000}
+
+/* =========================
+   FORM
+========================= */
+
+.form-group {
+    margin-bottom: 18px;
+}
+
+.form-group label {
+    display: block;
+
+    font-size: 14px;
+
+    font-weight: 600;
+
+    color: #333;
+
+    margin-bottom: 7px;
+}
+
+.form-group label span {
+    color: #d00000;
+}
+
 
 .form-group input,
-.form-group textarea{
-    width:100%;
-    padding:12px 13px;
-    border:1px solid #ddd;
-    border-radius:4px;
-    font-size:14px;
-    outline:0;
-    font-family:inherit;
-    transition:.2s;
+.form-group textarea {
+    width: 100%;
+
+    padding: 12px 13px;
+
+    border: 1px solid #ddd;
+
+    border-radius: 4px;
+
+    font-size: 14px;
+
+    outline: none;
+
+    font-family: inherit;
+
+    transition: 0.2s;
 }
 
-.form-group textarea{
-    resize:vertical;
-    min-height:100px
+.form-group textarea {
+    resize: vertical;
+
+    min-height: 100px;
 }
+
 
 .form-group input:focus,
-.form-group textarea:focus{
-    border-color:#c9a227;
-    box-shadow:0 0 0 2px rgba(201,162,39,.12)
+.form-group textarea:focus {
+    border-color: #c9a227;
+
+    box-shadow:
+        0 0 0 2px rgba(201, 162, 39, 0.12);
 }
 
-.error{
-    display:block;
-    color:#d00000;
-    font-size:12px;
-    margin-top:5px;
-    min-height:15px
+
+/* =========================
+   ERROR
+========================= */
+
+.error {
+    display: block;
+
+    color: #d00000;
+
+    font-size: 12px;
+
+    margin-top: 5px;
+
+    min-height: 15px;
 }
 
-.submit-btn{
-    width:100%;
-    padding:13px;
-    border:0;
-    border-radius:4px;
-    background:#c9a227;
-    color:#fff;
-    font-size:16px;
-    font-weight:600;
-    cursor:pointer;
-    transition:.3s
+
+/* =========================
+   SUBMIT
+========================= */
+
+.submit-btn {
+    width: 100%;
+
+    padding: 13px;
+
+    border: 0;
+
+    border-radius: 4px;
+
+    background: #c9a227;
+
+    color: #fff;
+
+    font-size: 16px;
+
+    font-weight: 600;
+
+    cursor: pointer;
+
+    transition: 0.3s;
 }
 
-.submit-btn:hover{background:#a98617}
-
-.submit-btn:disabled{
-    opacity:.6;
-    cursor:not-allowed
+.submit-btn:hover {
+    background: #a98617;
 }
 
-#formMessage{
-    margin-top:15px;
-    text-align:center;
-    font-size:14px;
-    line-height:1.5
+.submit-btn:disabled {
+    opacity: 0.6;
+
+    cursor: not-allowed;
 }
 
-.success-message{color:#16803c}
-.error-message{color:#d00000}
+
+/* =========================
+   FORM MESSAGE
+========================= */
+
+#formMessage {
+    margin-top: 15px;
+
+    text-align: center;
+
+    font-size: 14px;
+
+    line-height: 1.5;
+}
+
+.success-message {
+    color: #16803c;
+}
+
+.error-message {
+    color: #d00000;
+}
 
 
 /* =========================
    TABLET
 ========================= */
 
-@media(max-width:768px){
+@media (max-width: 768px) {
 
-    .popup-overlay{
-        padding:15px;
+    .popup-overlay {
+        padding: 15px;
     }
 
-    .quote-popup{
-        max-width:520px;
-        padding:30px;
-        max-height:92vh;
+    .quote-popup {
+        max-width: 520px;
+
+        padding: 30px;
+
+        max-height: 92vh;
     }
 
-    .quote-popup h2{
-        font-size:26px;
+    .quote-popup h2 {
+        font-size: 26px;
     }
 
 }
@@ -181,54 +301,65 @@
    MOBILE
 ========================= */
 
-@media(max-width:600px){
+@media (max-width: 600px) {
 
-    .popup-overlay{
-        padding:12px;
-        align-items:center;
+    .popup-overlay {
+        padding: 12px;
+
+        align-items: center;
     }
 
-    .quote-popup{
-        width:100%;
-        max-width:100%;
-        padding:28px 20px 22px;
-        border-radius:7px;
-        max-height:94vh;
+    .quote-popup {
+        width: 100%;
+
+        max-width: 100%;
+
+        padding: 28px 20px 22px;
+
+        border-radius: 7px;
+
+        max-height: 94vh;
     }
 
-    .quote-popup h2{
-        font-size:24px;
-        padding-right:25px;
+    .quote-popup h2 {
+        font-size: 24px;
+
+        padding-right: 25px;
     }
 
-    .popup-subtitle{
-        font-size:13px;
-        margin-bottom:20px;
+    .popup-subtitle {
+        font-size: 13px;
+
+        margin-bottom: 20px;
     }
 
-    .close-btn{
-        top:10px;
-        right:12px;
-        font-size:28px;
+    .close-btn {
+        top: 10px;
+
+        right: 12px;
+
+        font-size: 28px;
     }
 
-    .form-group{
-        margin-bottom:15px;
+    .form-group {
+        margin-bottom: 15px;
     }
 
     .form-group input,
-    .form-group textarea{
-        padding:11px 12px;
-        font-size:14px;
+    .form-group textarea {
+        padding: 11px 12px;
+
+        font-size: 14px;
     }
 
-    .form-group textarea{
-        min-height:90px;
+    .form-group textarea {
+        min-height: 90px;
     }
 
-    .submit-btn{
-        padding:12px;
-        font-size:15px;
+    .submit-btn {
+        padding: 12px;
+
+        font-size: 15px;
     }
 
 }
@@ -238,22 +369,22 @@
    VERY SMALL MOBILE
 ========================= */
 
-@media(max-width:380px){
+@media (max-width: 380px) {
 
-    .popup-overlay{
-        padding:8px;
+    .popup-overlay {
+        padding: 8px;
     }
 
-    .quote-popup{
-        padding:25px 16px 18px;
+    .quote-popup {
+        padding: 25px 16px 18px;
     }
 
-    .quote-popup h2{
-        font-size:22px;
+    .quote-popup h2 {
+        font-size: 22px;
     }
 
-    .popup-subtitle{
-        font-size:12px;
+    .popup-subtitle {
+        font-size: 12px;
     }
 
 }
