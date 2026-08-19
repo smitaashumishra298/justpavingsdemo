@@ -1,4 +1,4 @@
-<script>
+
 document.addEventListener("DOMContentLoaded", function () {
 
     const navQuoteBtn = document.getElementById("navQuoteBtn");
@@ -53,4 +53,3 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
 });
-</script>
