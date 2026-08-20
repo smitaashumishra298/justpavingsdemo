@@ -86,7 +86,7 @@ if (!preg_match("/^[6-9][0-9]{9}$/", $phone)) {
  * YAHAN APNA RECEIVING EMAIL DAALO
  */
 
-$to = "YOUR-RECEIVING-EMAIL@gmail.com";
+$to = "smitapathak298@gmail.com";
 
 
 /*
@@ -94,7 +94,7 @@ $to = "YOUR-RECEIVING-EMAIL@gmail.com";
  * to us email ko From mein use karo.
  */
 
-$fromEmail = "info@surepathsolutions.co.in";
+$fromEmail = "smitapathak298@gmail.com";
 
 
 $subject = "New Get Quote Enquiry - Website";
