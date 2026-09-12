@@ -15,7 +15,102 @@
   <link rel="stylesheet" href="css/popup.css">
 <script>(function(){function h(){var p=document.getElementById('preloader');if(p)p.classList.add('hidden');}window.addEventListener('load',h);setTimeout(h,1600);})();</script>
 
+<style>
+    
+/* ===== ABOUT 3D STONE EFFECT ===== */
 
+.intro-media{
+    position:relative;
+    width:500px;
+    height:600px;
+    perspective:1200px;
+    transform-style:preserve-3d;
+}
+
+.intro-media>img{
+    width:500px;
+    height:600px;
+    object-fit:cover;
+    display:block;
+    border-radius:4px;
+    transform:perspective(1200px) rotateY(-4deg) rotateX(2deg);
+    transition:.8s cubic-bezier(.2,.8,.2,1);
+    box-shadow:0 18px 35px rgba(0,0,0,.15),
+               0 35px 70px rgba(0,0,0,.08);
+}
+
+.intro-media:hover>img{
+    transform:perspective(1200px)
+             rotateY(5deg) rotateX(-3deg)
+             translateZ(35px) scale(1.025);
+    box-shadow:25px 30px 55px rgba(0,0,0,.22),
+               0 45px 90px rgba(0,0,0,.12);
+    filter:brightness(1.04) contrast(1.03);
+}
+
+/* Light reflection */
+.intro-media:before{
+    content:"";
+    position:absolute;
+    top:-40%;
+    left:-100%;
+    width:55%;
+    height:180%;
+    background:linear-gradient(
+        100deg,transparent,
+        rgba(255,255,255,.3),
+        transparent
+    );
+    transform:rotate(18deg);
+    z-index:3;
+    pointer-events:none;
+    transition:left 1.1s ease;
+}
+
+.intro-media:hover:before{
+    left:145%;
+}
+
+/* Floating A+ badge */
+.intro-media .stamp{
+    transform:translateZ(50px) rotate(-4deg);
+    animation:badgeFloat 4s ease-in-out infinite;
+    box-shadow:0 12px 25px rgba(0,0,0,.18);
+}
+
+.intro-media:hover .stamp{
+    transform:translateZ(75px) rotate(0) scale(1.06);
+}
+
+@keyframes badgeFloat{
+    0%,100%{transform:translateZ(50px) translateY(0) rotate(-4deg)}
+    50%{transform:translateZ(65px) translateY(-8px) rotate(-2deg)}
+}
+
+/* Heading subtle 3D */
+.split>.reveal.d1 h2{
+    transition:.6s ease;
+}
+
+.split>.reveal.d1:hover h2{
+    transform:translateZ(12px);
+    text-shadow:5px 8px 18px rgba(0,0,0,.12);
+}
+
+/* Mobile */
+@media(max-width:768px){
+    .intro-media{
+        width:100%;
+        height:auto;
+    }
+
+    .intro-media>img{
+        width:100%;
+        height:auto;
+        aspect-ratio:5/6;
+    }
+}
+</style>
 </head>
 <body>
 
@@ -25,7 +120,7 @@
 <!-- ===== Top bar ===== -->
 <div class="topbar"><div class="container">
   <div class="tb-left">
-    <span><i class="fa-solid fa-phone"></i><a href="tel:+442079460958">+44 20 7946 0958</a></span>
+    <span><i class="fa-solid fa-phone"></i><a href="tel:++440000000000">+440000000000</a></span>
     <span><i class="fa-solid fa-envelope"></i><a href="mailto:sales@justpaving.co.uk">sales@justpaving.co.uk</a></span>
     <span><i class="fa-solid fa-clock"></i>Mon – Fri: 8:00 – 18:00 · Sat: 9:00 – 14:00</span>
   </div>
@@ -74,8 +169,8 @@
     </li>
    
   
-    <li><a href="index.html#services">Services</a></li>
-    <li><a href="index.html#blog">Blog</a></li>
+    <li><a href="services.html">Services</a></li>
+    <li><a href="blog.html">Blog</a></li>
     <li><a href="contact.html">Contact</a></li>
   </ul></nav>
   <div class="nav-actions">
@@ -94,18 +189,19 @@
   <div class="md-head"><img src="assets/logo-badge.png" alt="JustPaving" style="height:44px;border-radius:10px"><button class="close" id="drawerClose" aria-label="Close"><i class="fa-solid fa-xmark"></i></button></div>
   <a href="index.html">Home</a>
   <a href="about.html">About Us</a>
-  <div class="md-toggle"><span>Products</span><i class="fa-solid fa-plus"></i></div>
+  <div class="md-toggle"><span style="color:#eaeaea;font-weight: 500;padding:13px 6px;border-bottom: 1px solid rgba(255,255,255,.08);">Products</span><i class="fa-solid fa-plus"></i></div>
   <div class="md-sub">
+    
     <a href="products.html">All Products</a>
     <a href="products.html">Porcelain Slabs</a><a href="products.html">Outdoor Porcelain</a>
     <a href="products.html">Marble</a><a href="products.html">Granite</a><a href="products.html">Travertine</a>
   </div>
   
-  <a href="index.html#services">Services</a>
-  <a href="index.html#blog">Blog / News</a>
+  <a href="services.html">Services</a>
+  <a href="blog.html">Blog / News</a>
   <a href="contact.html">Contact Us</a>
-  <a class="btn btn-gold md-cta" href="contact.html" style="justify-content:center" id="navQuoteBtn">Get Quote</a>
-</aside>
+  
+ </aside>
 
 <!-- ===== HERO ===== -->
 <section class="hero" id="home">
@@ -267,6 +363,43 @@
 
 </section>
 
+<!-- ===== WHY ===== -->
+
+<section class="section" id="why">
+
+    <div class="container">
+
+        <div class="sec-head center reveal" style="margin-bottom:3rem">
+
+            <div class="eyebrow center">
+                The JustPaving Difference
+            </div>
+
+            <h2>
+                Why clients choose us
+            </h2>
+
+        </div>
+
+
+        <div class="cards grid-4" id="whyGrid"></div>
+
+    </div>
+
+</section>
+
+
+<!-- ===== STATS ===== -->
+
+<section class="section stats">
+
+    <div class="container">
+
+        <div class="stat-div" id="statGrid"></div>
+
+    </div>
+
+</section>
 
 <!-- ===== FEATURED CATEGORIES ===== -->
 
@@ -308,47 +441,10 @@
 </section>
 
 
-<!-- ===== WHY ===== -->
-
-<section class="section" id="why">
-
-    <div class="container">
-
-        <div class="sec-head center reveal" style="margin-bottom:3rem">
-
-            <div class="eyebrow center">
-                The JustPaving Difference
-            </div>
-
-            <h2>
-                Why clients choose us
-            </h2>
-
-        </div>
-
-
-        <div class="cards grid-4" id="whyGrid"></div>
-
-    </div>
-
-</section>
-
-
-<!-- ===== STATS ===== -->
-
-<section class="section stats">
-
-    <div class="container">
-
-        <div class="stat-div" id="statGrid"></div>
-
-    </div>
-
-</section>
 
 
 <!-- ===== PROJECTS ===== -->
-
+<!--
 <section class="section" id="projects">
 
     <div class="container">
@@ -374,11 +470,11 @@
 
     </div>
 
-</section>
+</section>-->
 
 
 <!-- ===== GALLERY PREVIEW ===== -->
-
+<!----
 <section class="section bg-light">
 
     <div class="container">
@@ -410,54 +506,7 @@
 
     </div>
 
-</section>
-
-
-<!-- ===== TESTIMONIALS ===== -->
-
-<section class="section testi">
-
-    <div class="container">
-
-        <div class="sec-head center reveal" style="margin-bottom:3rem">
-
-            <div class="eyebrow center">
-                Kind Words
-            </div>
-
-            <h2>
-                What our clients say
-            </h2>
-
-        </div>
-
-
-        <div class="cards grid-3" id="testiGrid"></div>
-
-    </div>
-
-</section>
-
-
-<!-- ===== BRANDS ===== -->
-
-<section class="section" style="padding-top:0">
-
-    <div class="container">
-
-        <p
-            class="text-center reveal"
-            style="letter-spacing:.18em;text-transform:uppercase;font-size:.78rem;color:var(--muted);margin-bottom:2rem"
-        >
-            Brands we work with
-        </p>
-
-
-        <div class="brands reveal" id="brandGrid"></div>
-
-    </div>
-
-</section>
+</section>-->
 
 
 <!-- ===== SERVICES ===== -->
@@ -484,6 +533,32 @@
     </div>
 
 </section>
+
+<!-- ===== TESTIMONIALS ===== -->
+
+<section class="section testi">
+
+    <div class="container">
+
+        <div class="sec-head center reveal" style="margin-bottom:3rem">
+
+            <div class="eyebrow center">
+                Kind Words
+            </div>
+
+            <h2>
+                What our clients say
+            </h2>
+
+        </div>
+
+
+        <div class="cards grid-3" id="testiGrid"></div>
+
+    </div>
+
+</section>
+
 
 
 <!-- ===== BLOG ===== -->
@@ -552,6 +627,27 @@
 
 </section>
   
+<!-- ===== BRANDS ===== -->
+
+<section class="section" style="padding-top:0">
+
+    <div class="container">
+
+        <p
+            class="text-center reveal"
+            style="letter-spacing:.18em;text-transform:uppercase;font-size:.78rem;color:var(--muted);margin-bottom:2rem"
+        >
+            Brands we work with
+        </p>
+
+
+        <div class="brands reveal" id="brandGrid"></div>
+
+    </div>
+
+</section>
+
+
 <!---modal-->
 <!-- GET QUOTE POPUP -->
 
